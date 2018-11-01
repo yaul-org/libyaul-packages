@@ -43,10 +43,10 @@ prepare() {
   git submodule init
   git submodule update -f
   /usr/bin/cp yaul.env.in "${srcdir}/yaul.env"
-  _change_env_value "INSTALL_ROOT" "${_work_path}/tool-chains" "${srcdir}/yaul.env"
-  _change_env_value "BUILD_ROOT" "${srcdir}/build" "${srcdir}/yaul.env"
-  _change_env_value "BUILD" "build" "${srcdir}/yaul.env"
-  _change_env_value "OPTION_DEV_CARTRIDGE" "0" "${srcdir}/yaul.env"
+  _change_env_value "YAUL_INSTALL_ROOT" "${_work_path}/tool-chains" "${srcdir}/yaul.env"
+  _change_env_value "YAUL_BUILD_ROOT" "${srcdir}/build" "${srcdir}/yaul.env"
+  _change_env_value "YAUL_BUILD" "build" "${srcdir}/yaul.env"
+  _change_env_value "YAUL_OPTION_DEV_CARTRIDGE" "0" "${srcdir}/yaul.env"
 }
 
 build() {
