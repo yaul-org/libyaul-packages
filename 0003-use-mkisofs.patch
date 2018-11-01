@@ -1,0 +1,27 @@
+diff --git a/tools/make-iso/make-iso b/tools/make-iso/make-iso
+index df595d2..0342ad3 100755
+--- a/tools/make-iso/make-iso
++++ b/tools/make-iso/make-iso
+@@ -50,7 +50,6 @@ options=(-quiet
+     -iso-level 1
+     -input-charset iso8859-1
+     -no-bak
+-    -m "'.*'"
+     -o "\"${image}.iso\""
+     -generic-boot "\"IP.BIN\"")
+ 
+@@ -73,6 +72,12 @@ else
+ fi
+ 
+ # Generate image
+-echo "genisoimage ${options[@]} \"${directory}\"" | sh
++echo "mkisofs ${options[@]} \"${directory}\"" | sh -x
+ # Output directory structure in image
+-isoinfo -f -i "${image}.iso" 2>&1
++# isoinfo -f -i "${image}.iso" 2>&1
++cat > "${image}.cue" << EOF
++FILE "${image}.iso" BINARY
++  TRACK 01 MODE1/2048
++    INDEX 01 00:00:00
++EOF
++

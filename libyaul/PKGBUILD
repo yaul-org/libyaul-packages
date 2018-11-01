@@ -4,23 +4,27 @@ _branch="develop"
 _realname=yaul-${_branch}-git
 pkgbase=mingw-w64-${_realname}
 pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}"
-pkgver=r1165.1f5277e
+pkgver=r1166.a32b597
 pkgrel=1
 pkgdesc="An open source development kit for the SEGA Saturn (mingw-w64)"
 arch=('x86_64')
 url="http://yaul.org/"
 license=('MIT')
 depends=("p7zip" "wget" "git" "make" "gcc" "unzip" "zip" "diffutils" "dos2unix" "patch" "tar" "gawk")
-options=('!strip' '!buildflags' 'staticlibs')
+options=('!strip' '!buildflags' 'staticlibs' 'debug')
 source=("tool-chain-${MINGW_PACKAGE_PREFIX}-20180609.7z::https://drive.google.com/uc?export=download&confirm=no_antivirus&id=1j1O31Lzl2uyl2n9Hn2iFg92bHQB_vN3R"
         "genromfs.zip::https://drive.google.com/uc?export=download&confirm=no_antivirus&id=1AEnUxJugEqYIb2Z7EjHF6C6yPsXOPrRP"
+        "mkisofs.zip::https://drive.google.com/uc?export=download&confirm=no_antivirus&id=1EPnQQ1hIgQ05Laydsrsib4Iz7W_ZSgv8"
         "0001-disable-genromfs.patch"
         "0002-disable-make-iso.patch"
+        "0003-use-mkisofs.patch"
         "libyaul::git+https://github.com/ijacquez/libyaul#branch=${_branch}")
 sha256sums=('f784f106c0c7fe418f6775e730943bde406ebe298cbd2c1e40535b848b53e9e2'
             'e8c72bba961f02ed39afa4f137ae01b16a439e62b159392a6db8a231c91fbd6a'
+            '142cca3951afae91de7c2699af06a1308ab8a989259e0b85714b687ac053098b'
             '5a264ba6a3ec87a3063c5276b60f67717c1135e7b75041b2108b56e00fb1f706'
             '18fb68ffac845f2bc3b89a4deeabcf350d00e5efbcb485d7f5b71590b57e407c'
+            '9fcdec68d58aacf525458dac50bfb9fa4ba48628e06afbdd58e0a5b763a24843'
             'SKIP')
 
 _change_env_value() {
@@ -46,6 +50,11 @@ prepare() {
   mkdir -p "${_work_path}/tool-chains/bin"
   unzip -d "${_work_path}/tool-chains/bin" genromfs.zip
   # }
+  # Work around until make-iso rewrite {
+  mkdir -p "${_work_path}/tool-chains/bin"
+  unzip -d "${_work_path}/tool-chains/bin" mkisofs.zip
+  # }
+
   cd "${srcdir}/libyaul"
   if check_option "debug" "y"; then
     git checkout ${_branch}
@@ -63,7 +72,7 @@ prepare() {
   _change_env_value "YAUL_INSTALL_ROOT" "/opt/tool-chains" "${srcdir}/yaul.env.install"
 
   patch -p0 < "../0001-disable-genromfs.patch"
-  patch -p0 < "../0002-disable-make-iso.patch"
+  patch -p0 < "../0003-use-mkisofs.patch"
 }
 
 build() {
