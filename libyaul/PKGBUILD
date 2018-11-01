@@ -53,9 +53,9 @@ build() {
   cd "${srcdir}/libyaul"
   source "${srcdir}/yaul.env"
   if check_option "debug" "y"; then
-    PREFIX="${pkgdir}" SILENT=1 make -j 1 debug
+    PREFIX="/opt/tool-chains" SILENT=1 make -j 1 debug
   else
-    PREFIX="${pkgdir}" SILENT=1 make -j 1 release
+    PREFIX="/opt/tool-chains" SILENT=1 make -j 1 release
   fi
 }
 
