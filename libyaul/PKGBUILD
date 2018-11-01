@@ -1,0 +1,81 @@
+# Maintainer: Israel Jacquez <mrkotfw@gmail.com>
+
+_branch="develop"
+_realname=yaul-${_branch}-git
+pkgbase=mingw-w64-${_realname}
+pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}"
+pkgver=r1163.0c79bc8
+pkgrel=1
+pkgdesc="An open source development kit for the SEGA Saturn (mingw-w64)"
+arch=('x86_64')
+url="http://yaul.org/"
+license=('MIT')
+depends=("p7zip" "wget" "git" "make" "gcc" "unzip" "zip" "diffutils" "dos2unix" "patch" "tar" "gawk")
+options=('!strip' '!buildflags' 'staticlibs')
+source=("tool-chain-${MINGW_PACKAGE_PREFIX}-20180609.7z::https://drive.google.com/uc?export=download&confirm=no_antivirus&id=1j1O31Lzl2uyl2n9Hn2iFg92bHQB_vN3R"
+        "libyaul::git+https://github.com/ijacquez/libyaul#branch=${_branch}")
+sha256sums=('f784f106c0c7fe418f6775e730943bde406ebe298cbd2c1e40535b848b53e9e2'
+            'SKIP')
+
+_change_env_value() {
+  local _variable="${1}"
+  local _value="${2}"
+  local _out="${3}"
+
+  /usr/bin/awk -F '=' '/^export '"${_variable}"'=.+/ { print $1 "='"${_value}"'"; getline; } { print; }' "${_out}" > "${_out}.tmp"
+  /usr/bin/mv "${_out}.tmp" "${_out}"
+}
+
+pkgver() {
+  cd "${srcdir}/libyaul"
+  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+prepare() {
+  export _work_path="${srcdir}/${_realname}-${pkgver}"
+
+  mkdir -p "${_work_path}"
+  mv "${srcdir}/tool-chains" "${_work_path}/"
+  cd "${srcdir}/libyaul"
+  if check_option "debug" "y"; then
+    git checkout ${_branch}
+  fi
+  git submodule init
+  git submodule update -f
+  /usr/bin/cp yaul.env.in "${srcdir}/yaul.env"
+  _change_env_value "INSTALL_ROOT" "${_work_path}/tool-chains" "${srcdir}/yaul.env"
+  _change_env_value "BUILD_ROOT" "${srcdir}/build" "${srcdir}/yaul.env"
+  _change_env_value "BUILD" "build" "${srcdir}/yaul.env"
+  _change_env_value "OPTION_DEV_CARTRIDGE" "0" "${srcdir}/yaul.env"
+}
+
+build() {
+  cd "${srcdir}/libyaul"
+  source "${srcdir}/yaul.env"
+  if check_option "debug" "y"; then
+    PREFIX="${pkgdir}" SILENT=1 make -j 1 debug
+  else
+    PREFIX="${pkgdir}" SILENT=1 make -j 1 release
+  fi
+}
+
+check() {
+  :
+}
+
+package() {
+  cd "${srcdir}/libyaul"
+  source "${srcdir}/yaul.env"
+  if check_option "debug" "y"; then
+    SILENT=1 make -j 1 install-debug
+  else
+    SILENT=1 make -j 1 install-release
+  fi
+  mkdir "${pkgdir}/opt"
+  cp -r "${_work_path}/tool-chains" "${pkgdir}/opt/tool-chains"
+}
+
+# Local Variables:
+# mode: sh
+# sh-basic-offset: 2
+# End:
