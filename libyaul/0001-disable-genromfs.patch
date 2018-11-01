@@ -1,0 +1,10 @@
+--- tools/Makefile
++++ tools/Makefile
+@@ -1,7 +1,6 @@
+ PROJECTS:= \
+ 	bin2c \
+ 	bin2o \
+-	genromfs \
+ 	make-iso
+ 
+ include ../env.mk

@@ -4,7 +4,7 @@ _branch="develop"
 _realname=yaul-${_branch}-git
 pkgbase=mingw-w64-${_realname}
 pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}"
-pkgver=r1163.0c79bc8
+pkgver=r1165.1f5277e
 pkgrel=1
 pkgdesc="An open source development kit for the SEGA Saturn (mingw-w64)"
 arch=('x86_64')
@@ -13,8 +13,14 @@ license=('MIT')
 depends=("p7zip" "wget" "git" "make" "gcc" "unzip" "zip" "diffutils" "dos2unix" "patch" "tar" "gawk")
 options=('!strip' '!buildflags' 'staticlibs')
 source=("tool-chain-${MINGW_PACKAGE_PREFIX}-20180609.7z::https://drive.google.com/uc?export=download&confirm=no_antivirus&id=1j1O31Lzl2uyl2n9Hn2iFg92bHQB_vN3R"
+        "genromfs.zip::https://drive.google.com/uc?export=download&confirm=no_antivirus&id=1AEnUxJugEqYIb2Z7EjHF6C6yPsXOPrRP"
+        "0001-disable-genromfs.patch"
+        "0002-disable-make-iso.patch"
         "libyaul::git+https://github.com/ijacquez/libyaul#branch=${_branch}")
 sha256sums=('f784f106c0c7fe418f6775e730943bde406ebe298cbd2c1e40535b848b53e9e2'
+            'e8c72bba961f02ed39afa4f137ae01b16a439e62b159392a6db8a231c91fbd6a'
+            '5a264ba6a3ec87a3063c5276b60f67717c1135e7b75041b2108b56e00fb1f706'
+            '18fb68ffac845f2bc3b89a4deeabcf350d00e5efbcb485d7f5b71590b57e407c'
             'SKIP')
 
 _change_env_value() {
@@ -36,6 +42,10 @@ prepare() {
 
   mkdir -p "${_work_path}"
   mv "${srcdir}/tool-chains" "${_work_path}/"
+  # Work around until genromfs compiles on MinGW {
+  mkdir -p "${_work_path}/tool-chains/bin"
+  unzip -d "${_work_path}/tool-chains/bin" genromfs.zip
+  # }
   cd "${srcdir}/libyaul"
   if check_option "debug" "y"; then
     git checkout ${_branch}
@@ -44,18 +54,25 @@ prepare() {
   git submodule update -f
   /usr/bin/cp yaul.env.in "${srcdir}/yaul.env"
   _change_env_value "YAUL_INSTALL_ROOT" "${_work_path}/tool-chains" "${srcdir}/yaul.env"
+  _change_env_value "YAUL_PREFIX" "/opt/tool-chains" "${srcdir}/yaul.env"
   _change_env_value "YAUL_BUILD_ROOT" "${srcdir}/build" "${srcdir}/yaul.env"
   _change_env_value "YAUL_BUILD" "build" "${srcdir}/yaul.env"
   _change_env_value "YAUL_OPTION_DEV_CARTRIDGE" "0" "${srcdir}/yaul.env"
+
+  /usr/bin/cp yaul.env.in "${srcdir}/yaul.env.install"
+  _change_env_value "YAUL_INSTALL_ROOT" "/opt/tool-chains" "${srcdir}/yaul.env.install"
+
+  patch -p0 < "../0001-disable-genromfs.patch"
+  patch -p0 < "../0002-disable-make-iso.patch"
 }
 
 build() {
   cd "${srcdir}/libyaul"
   source "${srcdir}/yaul.env"
   if check_option "debug" "y"; then
-    PREFIX="/opt/tool-chains" SILENT=1 make -j 1 debug
+    SILENT=1 make -j 1 debug tools
   else
-    PREFIX="/opt/tool-chains" SILENT=1 make -j 1 release
+    SILENT=1 make -j 1 release tools
   fi
 }
 
@@ -67,12 +84,13 @@ package() {
   cd "${srcdir}/libyaul"
   source "${srcdir}/yaul.env"
   if check_option "debug" "y"; then
-    SILENT=1 make -j 1 install-debug
+    SILENT=1 make -j 1 install-debug install-tools
   else
-    SILENT=1 make -j 1 install-release
+    SILENT=1 make -j 1 install-release install-tools
   fi
   mkdir "${pkgdir}/opt"
   cp -r "${_work_path}/tool-chains" "${pkgdir}/opt/tool-chains"
+  install -m 644 "${srcdir}/yaul.env.install" "${pkgdir}/opt/tool-chains/yaul.env.in"
 }
 
 # Local Variables:
