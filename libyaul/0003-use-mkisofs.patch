@@ -1,7 +1,5 @@
-diff --git a/tools/make-iso/make-iso b/tools/make-iso/make-iso
-index df595d2..0342ad3 100755
---- a/tools/make-iso/make-iso
-+++ b/tools/make-iso/make-iso
+--- tools/make-iso/make-iso
++++ tools/make-iso/make-iso
 @@ -50,7 +50,6 @@ options=(-quiet
      -iso-level 1
      -input-charset iso8859-1
