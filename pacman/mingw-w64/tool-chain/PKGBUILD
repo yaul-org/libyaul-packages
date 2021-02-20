@@ -1,0 +1,32 @@
+# Maintainer: Israel Jacquez <mrkotfw@gmail.com>
+
+_realname=yaul-tool-chain
+
+pkgbase=mingw-w64-${_realname}
+pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}"
+pkgver=20210219
+pkgrel=1
+pkgdesc="Tool-chain for Yaul (mingw-w64)"
+arch=('x86_64')
+url="http://github.com/ijacquez/libyaul-packages"
+license=('GPLv3')
+depends=("make")
+makedepends=("tar")
+options=('!strip' '!buildflags' 'staticlibs' '!debug')
+source=("https://github.com/ijacquez/libyaul-packages/releases/download/${pkgver}/tool-chain-MinGW-${arch}-${pkgver}.tar.bz2")
+sha256sums=('71e343c8ae6f4e8fa8299fe5ead41c5ebbca77108c7dd0648d1aba9d071443be')
+noextract=("tool-chain-MinGW-${arch}-${pkgver}.tar.bz2")
+
+package() {
+  /usr/bin/mkdir -p "${pkgdir}/opt/tool-chains"
+
+  /usr/bin/bunzip2 "tool-chain-MinGW-${arch}-${pkgver}.tar.bz2"
+  /usr/bin/tar mxvf "tool-chain-MinGW-${arch}-${pkgver}.tar" -C "${pkgdir}/opt/tool-chains/"
+}
+
+# -*- mode: sh -*-
+
+# Local Variables:
+# mode: sh
+# sh-basic-offset: 2
+# End:

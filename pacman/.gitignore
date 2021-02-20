@@ -1,8 +1,4 @@
 pkg/
 src/
 *.log
-*.tar.xz
 *.tar.zst
-*.tar.bz2
-*.7z
-*.zip

@@ -2,26 +2,27 @@
 
 _realname=yaul-tool-chain
 
-pkgbase=mingw-w64-${_realname}
-pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}"
+pkgname="${_realname}"
 pkgver=20210219
 pkgrel=1
-pkgdesc="Tool-chain for Yaul (mingw-w64)"
+pkgdesc="Tool-chain for Yaul"
 arch=('x86_64')
 url="http://github.com/ijacquez/libyaul-packages"
 license=('GPLv3')
 depends=("make")
 makedepends=("tar")
 options=('!strip' '!buildflags' 'staticlibs' '!debug')
-source=("https://github.com/ijacquez/libyaul-packages/releases/download/${pkgver}/tool-chain-MinGW-x86_64-${pkgver}.tar.bz2")
-sha256sums=('71e343c8ae6f4e8fa8299fe5ead41c5ebbca77108c7dd0648d1aba9d071443be')
-noextract=("tool-chain-MinGW-x86_64-${pkgver}.tar.bz2")
+source_x86=("https://github.com/ijacquez/libyaul-packages/releases/download/${pkgver}/tool-chain-Linux-x86-${pkgver}.tar.bz2")
+sha256sums_x86=('74aab56e82b2155d695cf55afb6a8df744e215d644c5070c4bb49074155ff94b')
+source_x86_64=("https://github.com/ijacquez/libyaul-packages/releases/download/${pkgver}/tool-chain-Linux-x86_64-${pkgver}.tar.bz2")
+sha256sums_x86_64=('10c3135e540a629ec859267bf06eebf4acfdef26ffc90c234b21e9145ec71698')
+noextract=("tool-chain-Linux-${arch}-${pkgver}.tar.bz2")
 
 package() {
   /usr/bin/mkdir -p "${pkgdir}/opt/tool-chains"
 
-  /usr/bin/bunzip2 "tool-chain-MinGW-x86_64-${pkgver}.tar.bz2"
-  /usr/bin/tar mxvf "tool-chain-MinGW-x86_64-${pkgver}.tar" -C "${pkgdir}/opt/tool-chains/"
+  /usr/bin/bunzip2 "tool-chain-Linux-${arch}-${pkgver}.tar.bz2"
+  /usr/bin/tar mxvf "tool-chain-Linux-${arch}-${pkgver}.tar" -C "${pkgdir}/opt/tool-chains/"
 }
 
 # -*- mode: sh -*-

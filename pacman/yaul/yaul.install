@@ -1,36 +1,36 @@
 ## arg 1:  the new package version
 post_install() {
-  _cols=`tput cols`
-  _lines=`tput lines`
+  _cols=`/usr/bin/tput cols`
+  _line=`/usr/bin/printf -- "*%.0s" \`/usr/bin/seq 1 ${_cols}\``
 
-  printf -- "*%.0s" `seq 1 ${_cols}`
+  /usr/bin/printf -- "${_line}\\n"
 
-  awk '{ printf "* " $0 "\n" }' <<EOF
+  /usr/bin/awk '{ printf "* " $0 "\n" }' <<EOF
 For the first time, please be sure to copy,
   /opt/tool-chains/sh2eb-elf/yaul.env.in
 to
   \$HOME/.yaul.env
 EOF
 
-  printf -- "*%.0s" `seq 1 ${_cols}`
+  /usr/bin/printf -- "${_line}\\n"
 }
 
 # arg 1:  the new package version
 # arg 2:  the old package version
 post_upgrade() {
-  _cols=`tput cols`
-  _lines=`tput lines`
+  _cols=`/usr/bin/tput cols`
+  _line=`/usr/bin/printf -- "*%.0s" \`/usr/bin/seq 1 ${_cols}\``
 
-  printf -- "*%.0s" `seq 1 ${_cols}`
+  /usr/bin/printf -- "${_line}\\n"
 
-  awk '{ printf "* " $0 "\n" }' <<EOF
+  /usr/bin/awk '{ printf "* " $0 "\n" }' <<EOF
 Due to the upgrade, please be sure to copy,
   /opt/tool-chains/sh2eb-elf/yaul.env.in
 to
   \$HOME/.yaul.env
 EOF
 
-  printf -- "*%.0s" `seq 1 ${_cols}`
+  /usr/bin/printf -- "${_line}\\n"
 }
 
 # Local Variables:
