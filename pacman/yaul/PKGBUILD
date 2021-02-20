@@ -3,7 +3,7 @@
 _os="mingw-w64"
 
 _branch="develop"
-_realname=libyaul-git
+_realname=yaul-git
 
 _install_relpath="opt/tool-chains/sh2eb-elf"
 
