@@ -1,0 +1,35 @@
+# Maintainer: Israel Jacquez <mrkotfw@gmail.com>
+
+_branch="develop"
+_realname=libyaul-examples-git
+
+pkgname="${_realname}"
+pkgver=r362.1dce74a
+pkgrel=1
+pkgdesc="Examples for Yaul (mingw-w64)"
+arch=('x86_64')
+url="http://yaul.org/"
+license=('MIT')
+depends=()
+builddepends=("git")
+options=('!strip' '!buildflags' 'staticlibs' '!debug')
+source=("${_realname}"::"git+https://github.com/ijacquez/libyaul-examples#branch=${_branch}")
+sha256sums=('SKIP')
+
+pkgver() {
+  cd "${srcdir}/${_realname}"
+
+  printf -- "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse HEAD | sed -r 's/(.{7}).*/\1/')"
+}
+
+package() {
+  /usr/bin/mkdir -p "${pkgdir}/opt"
+  /usr/bin/cp -r "${srcdir}/${_realname}" "${pkgdir}/opt/libyaul-examples"
+  /usr/bin/rm -r -f "${pkgdir}/opt/libyaul-examples/.git"
+  /usr/bin/rm -r -f "${pkgdir}/opt/libyaul-examples/.gitmodules"
+}
+
+# Local Variables:
+# mode: sh
+# sh-basic-offset: 2
+# End:
