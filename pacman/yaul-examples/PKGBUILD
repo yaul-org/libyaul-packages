@@ -1,7 +1,7 @@
 # Maintainer: Israel Jacquez <mrkotfw@gmail.com>
 
 _branch="develop"
-_realname=libyaul-examples-git
+_realname=yaul-examples-git
 
 pkgname="${_realname}"
 pkgver=r362.1dce74a
@@ -24,9 +24,9 @@ pkgver() {
 
 package() {
   /usr/bin/mkdir -p "${pkgdir}/opt"
-  /usr/bin/cp -r "${srcdir}/${_realname}" "${pkgdir}/opt/libyaul-examples"
-  /usr/bin/rm -r -f "${pkgdir}/opt/libyaul-examples/.git"
-  /usr/bin/rm -r -f "${pkgdir}/opt/libyaul-examples/.gitmodules"
+  /usr/bin/cp -r "${srcdir}/${_realname}" "${pkgdir}/opt/yaul-examples"
+  /usr/bin/rm -r -f "${pkgdir}/opt/yaul-examples/.git"
+  /usr/bin/rm -r -f "${pkgdir}/opt/yaul-examples/.gitmodules"
 }
 
 # Local Variables:
