@@ -1,6 +1,1 @@
-/pkg/
-/src/
-/*.tar.xz
-/libyaul/
-/*.7z
-/*.zip
+/libyaul-git
