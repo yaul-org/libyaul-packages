@@ -8,15 +8,15 @@ _realname=yaul-git
 _install_relpath="opt/tool-chains/sh2eb-elf"
 
 pkgname="${_realname}"
-pkgver=r2003.004fc14
+pkgver=r2006.5724d67
 pkgrel=1
 pkgdesc="An open source development kit for the SEGA Saturn"
 arch=('x86_64')
 url="http://github.com/ijacquez/libyaul"
 license=('MIT')
-depends=("${_os}-${arch}-yaul-tool-chain")
+depends=("${_os}-${arch}-yaul-tool-chain" "xorriso")
 builddepends=("git" "make" "gcc" "tar" "gawk" "sed" "findutils" "${_os}-${arch}-yaul-tool-chain")
-options=('!strip' '!buildflags' 'staticlibs' 'debug')
+options=('!strip' '!buildflags' '!makeflags' 'staticlibs' '!debug')
 source=("${_realname}"::"git+https://github.com/ijacquez/libyaul#branch=${_branch}")
 sha256sums=('SKIP')
 install=yaul.install
@@ -42,52 +42,43 @@ prepare() {
   /usr/bin/git submodule init
   /usr/bin/git submodule update -f
 
-  /usr/bin/cp -v yaul.env.in "${srcdir}/yaul.env"
-  _change_env_value "YAUL_INSTALL_ROOT" "/${_install_relpath}" "${srcdir}/yaul.env"
-  _change_env_value "YAUL_PREFIX" "sh2eb-elf" "${srcdir}/yaul.env"
-  _change_env_value "YAUL_BUILD_ROOT" "${srcdir}" "${srcdir}/yaul.env"
-  _change_env_value "YAUL_BUILD" "build" "${srcdir}/yaul.env"
-  _change_env_value "YAUL_OPTION_DEV_CARTRIDGE" "2" "${srcdir}/yaul.env"
-  _change_env_value "YAUL_CDB" "0" "${srcdir}/yaul.env"
+  /usr/bin/cp -v yaul.env.in "${srcdir}/yaul.env.build"
+  _change_env_value "YAUL_INSTALL_ROOT"         "/${_install_relpath}" "${srcdir}/yaul.env.build"
+  _change_env_value "YAUL_BUILD_ROOT"           "${srcdir}" "${srcdir}/yaul.env.build"
+  _change_env_value "YAUL_BUILD"                "build" "${srcdir}/yaul.env.build"
+  _change_env_value "YAUL_OPTION_BUILD_ASSERT"  "1" "${srcdir}/yaul.env.build"
+  _change_env_value "YAUL_OPTION_DEV_CARTRIDGE" "2" "${srcdir}/yaul.env.build"
+  _change_env_value "YAUL_CDB"                  "0" "${srcdir}/yaul.env.build"
 
-  /usr/bin/cp -v yaul.env.in "${srcdir}/yaul.env.user"
-  _change_env_value "YAUL_BUILD_ROOT" "\$HOME" "${srcdir}/yaul.env.user"
+  /usr/bin/cp -v "${srcdir}/yaul.env.build" "${srcdir}/yaul.env.in"
+  _change_env_value "YAUL_BUILD_ROOT"           "\$HOME" "${srcdir}/yaul.env.in"
+  _change_env_value "YAUL_CDB"                  "1" "${srcdir}/yaul.env.in"
+
+  /usr/bin/cp -v "${srcdir}/yaul.env.build" "${srcdir}/yaul.env.package"
 }
 
 build() {
   cd "${srcdir}/${_realname}"
 
-  source "${srcdir}/yaul.env"
-
-  /usr/bin/mkdir -p "${YAUL_INSTALL_ROOT}"
-
   if check_option "debug" "y"; then
-    SILENT=1 /usr/bin/make -j 1 debug tools
-  else
-    SILENT=1 /usr/bin/make -j 1 release tools
+    (source "${srcdir}/yaul.env.build"; SILENT= /usr/bin/make -j 1 debug tools)
+  else                                          
+    (source "${srcdir}/yaul.env.build"; SILENT= /usr/bin/make -j 1 release tools)
   fi
 }
 
 package() {
   cd "${srcdir}/${_realname}"
 
-  source "${srcdir}/yaul.env"
-
   /usr/bin/mkdir -p "${pkgdir}/${_install_relpath}"
 
-  # Override install path to force install inside ${pkgdir}
-  export YAUL_INSTALL_ROOT="${pkgdir}/${_install_relpath}"
-
   if check_option "debug" "y"; then
-    SILENT=1 /usr/bin/make -j 1 install-debug install-tools
+    (source "${srcdir}/yaul.env.package"; SILENT= YAUL_PREFIX="${pkgdir}/${_install_relpath}" /usr/bin/make -j 1 install-debug install-tools)
   else
-    SILENT=1 /usr/bin/make -j 1 install-release install-tools
+    (source "${srcdir}/yaul.env.package"; SILENT= YAUL_PREFIX="${pkgdir}/${_install_relpath}" /usr/bin/make -j 1 install-release install-tools)
   fi
 
-  /usr/bin/install -m 644 "${srcdir}/yaul.env.user" "${pkgdir}/${_install_relpath}/yaul.env.in"
-
-  # Remove references to ${pkgdir}
-  /usr/bin/find "${pkgdir}/${_install_relpath}" -type f -exec /usr/bin/sed -E -i 's#'"${pkgdir}"'##g' '{}' \;
+  /usr/bin/install -m 644 "${srcdir}/yaul.env.in" "${pkgdir}/${_install_relpath}/yaul.env.in"
 }
 
 # -*- mode: sh -*-
