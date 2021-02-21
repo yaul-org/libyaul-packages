@@ -22,8 +22,6 @@ package() {
   /usr/bin/mv "${pkgdir}/opt/emulators/yabause-${pkgver}-win64" "${pkgdir}/opt/emulators/yabause"
 }
 
-# -*- mode: sh -*-
-
 # Local Variables:
 # mode: sh
 # sh-basic-offset: 2

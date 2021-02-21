@@ -21,8 +21,6 @@ package() {
   /usr/bin/unzip -d "${pkgdir}/opt/emulators/mednafen" "mednafen.zip"
 }
 
-# -*- mode: sh -*-
-
 # Local Variables:
 # mode: sh
 # sh-basic-offset: 2

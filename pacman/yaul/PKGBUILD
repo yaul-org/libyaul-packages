@@ -81,8 +81,6 @@ package() {
   /usr/bin/install -m 644 "${srcdir}/yaul.env.in" "${pkgdir}/${_install_relpath}/yaul.env.in"
 }
 
-# -*- mode: sh -*-
-
 # Local Variables:
 # mode: sh
 # sh-basic-offset: 2

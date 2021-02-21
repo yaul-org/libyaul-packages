@@ -24,8 +24,6 @@ package() {
   /usr/bin/tar mxvf "tool-chain-MinGW-${arch}-${pkgver}.tar" -C "${pkgdir}/opt/tool-chains/"
 }
 
-# -*- mode: sh -*-
-
 # Local Variables:
 # mode: sh
 # sh-basic-offset: 2
