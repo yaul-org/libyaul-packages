@@ -1,21 +1,20 @@
 # Maintainer: Israel Jacquez <mrkotfw@gmail.com>
 
-_os="mingw-w64"
-
 _branch="develop"
 _realname=yaul-git
 
 _install_relpath="opt/tool-chains/sh2eb-elf"
 
-pkgname="${_realname}"
+pkgbase=mingw-w64-${_realname}
+pkgname="${MING_PACKAGE_PREFIX}-${_realname}"
 pkgver=r2006.5724d67
 pkgrel=1
 pkgdesc="An open source development kit for the SEGA Saturn"
 arch=('x86_64')
 url="http://github.com/ijacquez/libyaul"
 license=('MIT')
-depends=("${_os}-${arch}-yaul-tool-chain" "xorriso")
-builddepends=("git" "make" "gcc" "tar" "gawk" "sed" "findutils" "${_os}-${arch}-yaul-tool-chain")
+depends=("mingw-w64-${arch}-yaul-tool-chain" "xorriso")
+builddepends=("git" "make" "gcc" "tar" "gawk" "sed" "findutils" "mingw-w64-${arch}-yaul-tool-chain")
 options=('!strip' '!buildflags' '!makeflags' 'staticlibs' '!debug')
 source=("${_realname}"::"git+https://github.com/ijacquez/libyaul#branch=${_branch}")
 sha256sums=('SKIP')
