@@ -46,7 +46,7 @@ prepare() {
   _change_env_value "YAUL_BUILD_ROOT"           "${srcdir}" "${srcdir}/yaul.env.build"
   _change_env_value "YAUL_BUILD"                "build" "${srcdir}/yaul.env.build"
   _change_env_value "YAUL_OPTION_BUILD_ASSERT"  "1" "${srcdir}/yaul.env.build"
-  _change_env_value "YAUL_OPTION_DEV_CARTRIDGE" "2" "${srcdir}/yaul.env.build"
+  _change_env_value "YAUL_OPTION_DEV_CARTRIDGE" "1" "${srcdir}/yaul.env.build"
   _change_env_value "YAUL_CDB"                  "0" "${srcdir}/yaul.env.build"
 
   /usr/bin/cp -v "${srcdir}/yaul.env.build" "${srcdir}/yaul.env.in"
