@@ -21,8 +21,7 @@ noextract=("tool-chain-Linux-${arch}-${pkgver}.tar.bz2")
 package() {
   /usr/bin/mkdir -p "${pkgdir}/opt/tool-chains"
 
-  /usr/bin/bunzip2 "tool-chain-Linux-${arch}-${pkgver}.tar.bz2"
-  /usr/bin/tar mxvf "tool-chain-Linux-${arch}-${pkgver}.tar" -C "${pkgdir}/opt/tool-chains/"
+  /usr/bin/tar mxvfjp "tool-chain-Linux-${arch}-${pkgver}.tar.bz2" -C "${pkgdir}/opt/tool-chains/"
 }
 
 # Local Variables:
