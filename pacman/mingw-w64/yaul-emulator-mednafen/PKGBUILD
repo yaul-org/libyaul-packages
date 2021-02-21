@@ -1,0 +1,29 @@
+# Maintainer: Israel Jacquez <mrkotfw@gmail.com>
+
+_realname=yaul-emulator-mednafen
+
+pkgbase=mingw-w64-${_realname}
+pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}"
+pkgver=1.26.1
+pkgrel=1
+pkgdesc="Mednafen is a portable multi-system emulator."
+arch=('x86_64')
+url="https://mednafen.github.io"
+license=('GPLv2')
+makedepends=("unzip")
+options=('!strip' '!buildflags' 'staticlibs' '!debug')
+source=("mednafen.zip"::"https://mednafen.github.io/releases/files/mednafen-${pkgver}-win64.zip")
+sha256sums=('1d776e9355208c2fc81bea5ce036e955c5aea02f1176dc311df0a74ec17e6b48')
+noextract=("mednafen.zip")
+
+package() {
+  /usr/bin/mkdir -p "${pkgdir}/opt/emulators/mednafen"
+  /usr/bin/unzip -d "${pkgdir}/opt/emulators/mednafen" "mednafen.zip"
+}
+
+# -*- mode: sh -*-
+
+# Local Variables:
+# mode: sh
+# sh-basic-offset: 2
+# End:
