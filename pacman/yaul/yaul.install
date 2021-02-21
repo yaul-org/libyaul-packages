@@ -1,4 +1,4 @@
-## arg 1:  the new package version
+# Arg 1: The new package version
 post_install() {
   _cols=`/usr/bin/tput cols`
   _line=`/usr/bin/printf -- "*%.0s" \`/usr/bin/seq 1 ${_cols}\``
@@ -15,8 +15,8 @@ EOF
   /usr/bin/printf -- "${_line}\\n"
 }
 
-# arg 1:  the new package version
-# arg 2:  the old package version
+# Arg 1: The new package version
+# Arg 2: The old package version
 post_upgrade() {
   _cols=`/usr/bin/tput cols`
   _line=`/usr/bin/printf -- "*%.0s" \`/usr/bin/seq 1 ${_cols}\``
