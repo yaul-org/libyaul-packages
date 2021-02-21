@@ -1,0 +1,87 @@
+# Maintainer: Israel Jacquez <mrkotfw@gmail.com>
+
+_os="mingw-w64"
+
+_branch="develop"
+_realname=yaul-git
+
+_install_relpath="opt/tool-chains/sh2eb-elf"
+
+pkgname="${_realname}"
+pkgver=r2010.1e60480
+pkgrel=1
+pkgdesc="An open source development kit for the SEGA Saturn"
+arch=('x86_64')
+url="http://github.com/ijacquez/libyaul"
+license=('MIT')
+depends=("yaul-tool-chain" "xorriso")
+makedepends=("git" "make" "gcc" "tar" "gawk" "sed" "findutils" "yaul-tool-chain" "libftdi" "pkg-config")
+options=('!strip' '!buildflags' '!makeflags' 'staticlibs' '!debug')
+source=("${_realname}"::"git+https://github.com/ijacquez/libyaul#branch=${_branch}")
+sha256sums=('SKIP')
+install=yaul.install
+
+_change_env_value() {
+  local _variable="${1}"
+  local _value="${2}"
+  local _out="${3}"
+
+  /usr/bin/awk -F '=' '/^export '"${_variable}"'=.+/ { print $1 "='"${_value}"'"; getline; } { print; }' "${_out}" > "${_out}.tmp"
+  /usr/bin/mv "${_out}.tmp" "${_out}"
+}
+
+pkgver() {
+  cd "${srcdir}/${_realname}"
+
+  printf -- "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse HEAD | sed -r 's/(.{7}).*/\1/')"
+}
+
+prepare() {
+  cd "${srcdir}/${_realname}"
+
+  /usr/bin/git submodule init
+  /usr/bin/git submodule update -f
+
+  /usr/bin/cp -v yaul.env.in "${srcdir}/yaul.env.build"
+  _change_env_value "YAUL_INSTALL_ROOT"         "/${_install_relpath}" "${srcdir}/yaul.env.build"
+  _change_env_value "YAUL_BUILD_ROOT"           "${srcdir}" "${srcdir}/yaul.env.build"
+  _change_env_value "YAUL_BUILD"                "build" "${srcdir}/yaul.env.build"
+  _change_env_value "YAUL_OPTION_BUILD_ASSERT"  "1" "${srcdir}/yaul.env.build"
+  _change_env_value "YAUL_OPTION_DEV_CARTRIDGE" "2" "${srcdir}/yaul.env.build"
+  _change_env_value "YAUL_CDB"                  "0" "${srcdir}/yaul.env.build"
+
+  /usr/bin/cp -v "${srcdir}/yaul.env.build" "${srcdir}/yaul.env.in"
+  _change_env_value "YAUL_BUILD_ROOT"           "\$HOME" "${srcdir}/yaul.env.in"
+  _change_env_value "YAUL_CDB"                  "1" "${srcdir}/yaul.env.in"
+
+  /usr/bin/cp -v "${srcdir}/yaul.env.build" "${srcdir}/yaul.env.package"
+}
+
+build() {
+  cd "${srcdir}/${_realname}"
+
+  if check_option "debug" "y"; then
+    (source "${srcdir}/yaul.env.build"; SILENT= /usr/bin/make -j 1 debug tools)
+  else                                          
+    (source "${srcdir}/yaul.env.build"; SILENT= /usr/bin/make -j 1 release tools)
+  fi
+}
+
+package() {
+  cd "${srcdir}/${_realname}"
+
+  /usr/bin/mkdir -p "${pkgdir}/${_install_relpath}"
+
+  if check_option "debug" "y"; then
+    (source "${srcdir}/yaul.env.package"; SILENT= YAUL_PREFIX="${pkgdir}/${_install_relpath}" /usr/bin/make -j 1 install-debug install-tools)
+  else
+    (source "${srcdir}/yaul.env.package"; SILENT= YAUL_PREFIX="${pkgdir}/${_install_relpath}" /usr/bin/make -j 1 install-release install-tools)
+  fi
+
+  /usr/bin/install -m 644 "${srcdir}/yaul.env.in" "${pkgdir}/${_install_relpath}/yaul.env.in"
+}
+
+# Local Variables:
+# mode: sh
+# sh-basic-offset: 2
+# End:
