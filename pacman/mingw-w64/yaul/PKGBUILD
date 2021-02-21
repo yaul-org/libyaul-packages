@@ -6,8 +6,8 @@ _realname=yaul-git
 _install_relpath="opt/tool-chains/sh2eb-elf"
 
 pkgbase=mingw-w64-${_realname}
-pkgname="${MING_PACKAGE_PREFIX}-${_realname}"
-pkgver=r2006.5724d67
+pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}"
+pkgver=r2010.1e60480
 pkgrel=1
 pkgdesc="An open source development kit for the SEGA Saturn"
 arch=('x86_64')
