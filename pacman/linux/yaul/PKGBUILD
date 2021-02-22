@@ -15,11 +15,11 @@ arch=('x86_64')
 url="http://github.com/ijacquez/libyaul"
 license=('MIT')
 depends=("yaul-tool-chain" "xorriso")
-makedepends=("git" "make" "gcc" "tar" "gawk" "sed" "findutils" "yaul-tool-chain" "libftdi" "pkg-config")
+makedepends=("make" "gcc" "tar" "gawk" "sed" "findutils" "yaul-tool-chain" "libftdi" "pkg-config")
 options=('!strip' '!buildflags' '!makeflags' 'staticlibs' '!debug')
 source=("${_realname}"::"git+https://github.com/ijacquez/libyaul#branch=${_branch}")
 sha256sums=('SKIP')
-install=yaul.install
+install=../../yaul.install
 
 _change_env_value() {
   local _variable="${1}"

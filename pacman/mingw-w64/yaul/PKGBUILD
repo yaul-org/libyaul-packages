@@ -14,11 +14,11 @@ arch=('x86_64')
 url="http://github.com/ijacquez/libyaul"
 license=('MIT')
 depends=("mingw-w64-${arch}-yaul-tool-chain" "xorriso")
-builddepends=("git" "make" "gcc" "tar" "gawk" "sed" "findutils" "mingw-w64-${arch}-yaul-tool-chain")
+makedepends=("make" "gcc" "tar" "gawk" "sed" "findutils" "mingw-w64-${arch}-yaul-tool-chain")
 options=('!strip' '!buildflags' '!makeflags' 'staticlibs' '!debug')
 source=("${_realname}"::"git+https://github.com/ijacquez/libyaul#branch=${_branch}")
 sha256sums=('SKIP')
-install=yaul.install
+install=../../yaul.install
 
 _change_env_value() {
   local _variable="${1}"

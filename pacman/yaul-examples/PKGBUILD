@@ -10,8 +10,6 @@ pkgdesc="Examples for Yaul (mingw-w64)"
 arch=('x86_64')
 url="http://yaul.org/"
 license=('MIT')
-depends=()
-builddepends=("git")
 options=('!strip' '!buildflags' 'staticlibs' '!debug')
 source=("${_realname}"::"git+https://github.com/ijacquez/libyaul-examples#branch=${_branch}")
 sha256sums=('SKIP')
