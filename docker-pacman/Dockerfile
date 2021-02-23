@@ -43,9 +43,9 @@ COPY --chown=builder:builder .smbcredentials $HOME/
 COPY --chown=builder:builder .s3cfg $HOME/
 
 COPY --chown=builder:builder s3sync.sh $HOME/
-COPY --chown=builder:builder build-packages.sh $HOME/
+COPY --chown=builder:builder package-build-yaul.sh $HOME/
 
-RUN /bin/mkdir -p ${HOME}/SMB
+RUN /bin/mkdir -p ${REPO_ROOT_PATH}
 
 RUN /bin/mkdir -p ${HOME}/.ssh
 RUN echo $'Host github.com\n\
@@ -53,7 +53,7 @@ RUN echo $'Host github.com\n\
   IdentityFile /run/secrets/yaul_packages_ssh_identity_file'\
 >> "${HOME}/.ssh/config"
 
-RUN sudo -E /bin/sh -c 'echo "//$SMB_SERVER/$SMB_NAME $HOME/SMB cifs users,credentials=$HOME/.smbcredentials,iocharset=utf8 0 0"\
+RUN sudo -E /bin/sh -c 'echo "//${SMB_SERVER}/${SMB_NAME} ${REPO_ROOT_PATH} cifs users,credentials=$HOME/.smbcredentials,iocharset=utf8 0 0"\
 >> /etc/fstab'
 
 RUN sudo -E /bin/sh -c 'printf -- "\n\
