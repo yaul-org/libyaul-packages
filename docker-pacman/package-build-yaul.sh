@@ -12,14 +12,12 @@ panic() {
     exit "${2}"
 }
 
-linux_fix_libftdi() {
+linux_makepkg() {
     # Unfortunately, there's a bug in the libftdi package. See:
     # <https://bugs.archlinux.org/task/69115>.
     sudo /usr/sbin/pacman -S --noconfirm libftdi pkg-config
     sudo /bin/sed -E -i 's/libftdipp1/libftdi1/g' /usr/lib/pkgconfig/libftdi1.pc
-}
 
-linux_makepkg() {
     /usr/sbin/makepkg -sC --noconfirm || { panic "Unable to build package" 1; }
 }
 
@@ -54,11 +52,13 @@ sudo /usr/sbin/pacman -S --noconfirm yaul-linux/yaul-tool-chain || { panic "Unab
 
 case "${REPO_OS}" in
     "linux")
-        linux_fix_libftdi
         linux_makepkg
         ;;
     "mingw-w64")
         mingw_w64_makepkg
+        ;;
+    *)
+        panic "Unknown REPO_OS value" 1
         ;;
 esac
 
