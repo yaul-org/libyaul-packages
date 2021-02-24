@@ -1,9 +1,6 @@
 # Maintainer: Israel Jacquez <mrkotfw@gmail.com>
 
-_realname=yaul-emulator-yabause
-
-pkgbase=mingw-w64-${_realname}
-pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}"
+pkgname="yaul-emulator-yabause"
 pkgver=0.9.15
 pkgrel=1
 pkgdesc="Yabause is a Sega Saturn emulator."

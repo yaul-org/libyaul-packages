@@ -1,9 +1,6 @@
 # Maintainer: Israel Jacquez <mrkotfw@gmail.com>
 
-_realname=yaul-emulator-mednafen
-
-pkgbase=mingw-w64-${_realname}
-pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}"
+pkgname="yaul-emulator-mednafen"
 pkgver=1.26.1
 pkgrel=1
 pkgdesc="Mednafen is a portable multi-system emulator."
