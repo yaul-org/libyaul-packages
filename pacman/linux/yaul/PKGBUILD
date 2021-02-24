@@ -1,10 +1,7 @@
 # Maintainer: Israel Jacquez <mrkotfw@gmail.com>
 
-_os="mingw-w64"
-
 _branch="develop"
 _realname=yaul-git
-
 _install_relpath="opt/tool-chains/sh2eb-elf"
 
 pkgname="${_realname}"
