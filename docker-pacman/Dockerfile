@@ -13,8 +13,6 @@ ENV GIT_NAME="Israel Jacquez"
 ENV GIT_EMAIL="mrkotfw@gmail.com"
 
 ENV REPO_ROOT_PATH="${HOME}/SMB"
-ENV REPO_PATH="${REPO_ROOT_PATH}/repo/x86_64"
-ENV REPO_DB="${REPO_PATH}/yaul-packages.db.tar.xz"
 
 RUN if [ -z "$SMB_SERVER" ]; then echo  "\x1b[1;31mEnvironment variable SMB_SERVER must be specified. Exiting.\x1b[m\n"; exit 1; fi
 RUN if [ -z "$SMB_NAME" ];   then echo  "\x1b[1;31mEnvironment variable SMB_NAME must be specified. Exiting.\x1b[m\n"; exit 1; fi
@@ -63,12 +61,16 @@ RUN echo $'[user]\n\
         name = '$GIT_NAME$'\n\
         email = '$GIT_EMAIL >>"${HOME}/.gitconfig"
 
-RUN sudo -E /bin/sh -c 'echo "//${SMB_SERVER}/${SMB_NAME} ${REPO_ROOT_PATH} cifs users,credentials=$HOME/.smbcredentials,iocharset=utf8 0 0"\
+RUN sudo -E /bin/sh -c 'echo "//${SMB_SERVER}/${SMB_NAME} ${REPO_ROOT_PATH} cifs users,credentials=$HOME/.smbcredentials,iocharset=utf8,uid=builder,gid=builder 0 0"\
 >> /etc/fstab'
 
 RUN sudo -E /bin/sh -c 'printf -- "\n\
-[yaul-packages]\n\
+[yaul-linux]\n\
 SigLevel = Optional TrustAll\n\
-Server = http://packages.yaul.org/repo/x86_64\n" >> /etc/pacman.conf'
+Server = http://packages.yaul.org/linux/x86_64\n\
+\n\
+[yaul-mingw-w64]\n\
+SigLevel = Optional TrustAll\n\
+Server = http://packages.yaul.org/mingw-w64/x86_64\n" >> /etc/pacman.conf'
 
 CMD ["/bin/bash"]
