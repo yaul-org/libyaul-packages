@@ -1,24 +1,65 @@
 # Maintainer: Israel Jacquez <mrkotfw@gmail.com>
 
-pkgname="yaul-tool-chain"
-pkgver=20210219
+_branch="master"
+_realname=libyaul-tool-chain-git
+pkgname=${_realname}
+pkgver=r117.722cc4d
 pkgrel=1
 pkgdesc="Tool-chain for Yaul"
 arch=('x86_64')
-url="http://github.com/ijacquez/libyaul-packages"
-license=('GPLv3')
-depends=("make")
-makedepends=("tar")
-options=('!strip' '!buildflags' 'staticlibs' '!debug')
-source=("https://github.com/ijacquez/libyaul-packages/releases/download/${pkgver}/tool-chain-Linux-x86_64-${pkgver}.tar.bz2")
-sha256sums=('10c3135e540a629ec859267bf06eebf4acfdef26ffc90c234b21e9145ec71698')
-noextract=("tool-chain-Linux-${arch}-${pkgver}.tar.bz2")
+url="https://yaul.org/"
+license=('MIT')
+makedepends=("make" "gcc" "unzip" "help2man" "wget")
+options=('!strip' '!buildflags' 'staticlibs' 'debug')
+source=("git+https://github.com/ijacquez/libyaul-build-scripts#branch=${_branch}")
+sha256sums=('SKIP')
+
+pkgver() {
+  cd "${srcdir}/libyaul-build-scripts"
+
+  printf -- "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse HEAD | sed -r 's/(.{7}).*/\1/')"
+}
+
+prepare() {
+  cd "${srcdir}/libyaul-build-scripts"
+  /usr/bin/git submodule init
+  /usr/bin/git submodule update -f
+
+  /bin/rm -f .config
+  /bin/cp sh2eb-elf/native-linux.config .config
+  /bin/sed -i -E 's#^(CT_DEBUG_CT)=.*#\1=n#g' .config
+  /bin/sed -i -E 's#^(CT_DEBUG_INTERACTIVE)=.*#\1=n#g' .config
+  /bin/sed -i -E 's#^(CT_LOCAL_TARBALLS_DIR)=.*#\1='${srcdir}'/tarballs#g' .config
+  /bin/sed -i -E 's#^(CT_PREFIX_DIR)=.*$#\1="${CT_PREFIX:-'"${srcdir}/opt/tool-chains"'}/${CT_HOST:+HOST-${CT_HOST}/}${CT_TARGET}"#g' .config
+  /bin/sed -i -E 's#^(CT_LOG_TO_FILE)=.*#\1=n#g' .config
+  /bin/sed -i -E 's#^(CT_LOG_FILE_COMPRESS)=.*#\1=n#g' .config
+
+  /bin/mkdir -p "${srcdir}/tarballs"
+  /bin/mkdir -p "${srcdir}/opt/tool-chains"
+}
+
+build() {
+  cd "${srcdir}/libyaul-build-scripts"
+
+  # Crosstool-NG reports an error: Don't set CFLAGS. It screws up the build.
+  unset CFLAGS
+  # Crosstool-NG reports an error: Don't set CXXFLAGS. It screws up the build.
+  unset CXXFLAGS
+
+  cd crosstool-ng
+  ./bootstrap
+  ./configure --enable-local
+  /usr/bin/make
+  cd ..
+
+  crosstool-ng/ct-ng build
+}
 
 package() {
-  /usr/bin/mkdir -p "${pkgdir}/opt/tool-chains"
-
-  /usr/bin/tar mxvfjp "tool-chain-Linux-${arch}-${pkgver}.tar.bz2" -C "${pkgdir}/opt/tool-chains/"
+  /bin/cp -r "${srcdir}/opt" "${pkgver}/"
 }
+
+# -*- mode: sh -*-
 
 # Local Variables:
 # mode: sh
