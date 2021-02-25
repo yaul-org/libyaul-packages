@@ -5,6 +5,8 @@ set -x
 REPO_SUBPATH="${REPO_OS}/x86_64"
 REPO_PATH="${REPO_ROOT_PATH}/${REPO_SUBPATH}"
 REPO_DB="${REPO_PATH}/yaul-packages.db.tar.xz"
+REPO_PACKAGE="yaul-git"
+REPO_DIR="yaul"
 
 panic() {
     printf -- "Error: %s\\n" "${1}" >&2
@@ -45,7 +47,7 @@ cd "repository/pacman/${REPO_OS}" || { panic "Directory path pacman/${REPO_OS} d
 
 sudo /usr/sbin/pacman -Syy || { panic "Unable to sync" 1; }
 
-pushd yaul || { panic "Package yaul doesn't exist" 1; }
+pushd ${REPO_DIR} || { panic "Package ${REPO_DIR} doesn't exist" 1; }
 
 # Force install the tool-chain for Linux
 sudo /usr/sbin/pacman -S --noconfirm yaul-linux/yaul-tool-chain || { panic "Unable to install yaul-tool-chain" 1; }
@@ -67,21 +69,21 @@ if ! /usr/bin/git diff --exit-code --name-only PKGBUILD >/dev/null 2>&1; then
     pkgver=$(sed -n -E 's/^pkgver=(.*)$/\1/pg' PKGBUILD)
     [ -n "${pkgver}" ] || { panic "Unable to fetch package version" 1; }
 
-    mapfile -t files < <(/usr/bin/find "${REPO_PATH}" -type f -name "yaul-git-*.pkg.tar.zst")
+    mapfile -t files < <(/usr/bin/find "${REPO_PATH}" -type f -name "${REPO_PACKAGE}-*.pkg.tar.zst")
 
-    trap '/bin/rm '"${REPO_PATH}/yaul-git-${pkgver}"'-*.pkg.tar.zst' 1
+    trap '/bin/rm '"${REPO_PATH}/${REPO_PACKAGE}-${pkgver}"'-*.pkg.tar.zst' 1
 
     for file in "${files[@]}"; do
         /usr/sbin/repo-remove "${REPO_DB}" "${file}" || { panic "Unable to remove '${file}' from the repository\n" 1; }
         /bin/rm -f "${file}"
     done
 
-    /bin/cp yaul-git-"${pkgver}"-*.pkg.tar.zst "${REPO_PATH}/"
-    /usr/sbin/repo-add "${REPO_DB}" "${REPO_PATH}/yaul-git-${pkgver}"-*.pkg.tar.zst || { panic "Unable to add file to repository" 1; }
+    /bin/cp ${REPO_PACKAGE}-"${pkgver}"-*.pkg.tar.zst "${REPO_PATH}/"
+    /usr/sbin/repo-add "${REPO_DB}" "${REPO_PATH}/${REPO_PACKAGE}-${pkgver}"-*.pkg.tar.zst || { panic "Unable to add file to repository" 1; }
 
     /bin/bash -x "${HOME}/s3sync.sh" "${REPO_SUBPATH}" || exit 1
 
-    /usr/bin/git commit PKGBUILD -m "Update package version for yaul-git ${pkgver}" || { panic "Unable to commit changes" 1; }
+    /usr/bin/git commit PKGBUILD -m "Update package version for ${REPO_PACKAGE} ${pkgver}" || { panic "Unable to commit changes" 1; }
     /usr/bin/git push origin -u master || { panic "Unable to push commits" 1; }
 fi
 popd || exit 1
