@@ -2,17 +2,13 @@
 
 set -x
 
-REPO_SUBPATH="${REPO_OS}/x86_64"
-REPO_PATH="${REPO_ROOT_PATH}/${REPO_SUBPATH}"
-REPO_DB="${REPO_PATH}/yaul-packages.db.tar.xz"
-REPO_PACKAGE="yaul-git"
-REPO_DIR="yaul"
+export REPO_SUBPATH="${REPO_OS}/x86_64"
+export REPO_PATH="${REPO_ROOT_PATH}/${REPO_SUBPATH}"
+export REPO_DB="${REPO_PATH}/yaul-${REPO_OS}.db.tar.xz"
+export REPO_PACKAGE="yaul-git"
+export REPO_DIR="yaul"
 
-panic() {
-    printf -- "Error: %s\\n" "${1}" >&2
-
-    exit "${2}"
-}
+source "${HOME}/utils.sh"
 
 linux_makepkg() {
     # Unfortunately, there's a bug in the libftdi package. See:
@@ -64,26 +60,8 @@ case "${REPO_OS}" in
         ;;
 esac
 
-if ! /usr/bin/git diff --exit-code --name-only PKGBUILD >/dev/null 2>&1; then
-    # There might be a better way, but makepkg updates PKGBUILD's pkgver
-    pkgver=$(sed -n -E 's/^pkgver=(.*)$/\1/pg' PKGBUILD)
-    [ -n "${pkgver}" ] || { panic "Unable to fetch package version" 1; }
+# There might be a better way, but makepkg updates PKGBUILD's pkgver
+pkgver=$(sed -n -E 's/^pkgver=(.*)$/\1/pg' PKGBUILD 2>/dev/null)
 
-    mapfile -t files < <(/usr/bin/find "${REPO_PATH}" -type f -name "${REPO_PACKAGE}-*.pkg.tar.zst")
-
-    trap '/bin/rm '"${REPO_PATH}/${REPO_PACKAGE}-${pkgver}"'-*.pkg.tar.zst' 1
-
-    for file in "${files[@]}"; do
-        /usr/sbin/repo-remove "${REPO_DB}" "${file}" || { panic "Unable to remove '${file}' from the repository\n" 1; }
-        /bin/rm -f "${file}"
-    done
-
-    /bin/cp ${REPO_PACKAGE}-"${pkgver}"-*.pkg.tar.zst "${REPO_PATH}/"
-    /usr/sbin/repo-add "${REPO_DB}" "${REPO_PATH}/${REPO_PACKAGE}-${pkgver}"-*.pkg.tar.zst || { panic "Unable to add file to repository" 1; }
-
-    /bin/bash -x "${HOME}/s3sync.sh" "${REPO_SUBPATH}" || exit 1
-
-    /usr/bin/git commit PKGBUILD -m "Update package version for ${REPO_PACKAGE} ${pkgver}" || { panic "Unable to commit changes" 1; }
-    /usr/bin/git push origin -u master || { panic "Unable to push commits" 1; }
-fi
+/bin/bash "${HOME}/update-repo.sh" "${pkgver}" || exit 1
 popd || exit 1

@@ -45,8 +45,7 @@ COPY --chown=builder:builder .s3cfg $HOME/
 COPY --chown=builder:builder .smbcredentials $HOME/
 COPY --chown=builder:builder id_rsa $HOME/.ssh/id_rsa.github.com
 
-COPY --chown=builder:builder s3sync.sh $HOME/
-COPY --chown=builder:builder package-build-yaul.sh $HOME/
+COPY --chown=builder:builder *.sh $HOME/
 
 RUN /bin/mkdir -p ${REPO_ROOT_PATH}
 
