@@ -24,7 +24,6 @@ mingw_w64_makepkg() {
     # A possible "better" solution would be to create a cross-compilation Yaul
     # PKGBUILD that explicitly depends on mingw-w64-gcc and sets BUILD_CROSS
     # directly to make.
-    install_pkg community/mingw-w64-gcc
     BUILD_CROSS=1 make_pkg
 }
 

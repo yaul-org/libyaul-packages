@@ -14,5 +14,10 @@ could be moved to private repository soon.
 2. Once the image is built, update `yaul-git` package by calling
    `package-build-yaul.sh`.
 
-       docker run -it --rm --privileged yaul-packages:latest \
-           bash -c "bash /home/builder/package-build-yaul.sh"
+       docker run -it --rm --privileged -e REPO_OS=${REPO_OS} yaul-packages:latest ./package-build-$TYPE.sh
+
+   | `$TYPE`          | `REPO_OS=linux` | `REPO_OS=mingw-w64` | Description                       |
+   |------------------|-----------------|---------------------|-----------------------------------|
+   | `yaul`           | Y               | Y                   | Build pre-compiled Yaul libraries |
+   | `yaul-examples`  | Y               | Y                   | Bundle uncompiled Yaul examples   |
+   | `yaul-emulators` | N               | Y                   | Bundle pre-compiled emulators     |

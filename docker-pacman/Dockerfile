@@ -34,7 +34,8 @@ RUN /usr/bin/pacman -Syy --noconfirm && \
         cifs-utils \
         git \
         s3cmd \
-        openssh
+        openssh \
+        community/mingw-w64-gcc # Avoid having to install
 
 # Allow builder to run stuff as root (to install dependencies):
 RUN echo "builder ALL=(ALL) NOPASSWD: ALL" >/etc/sudoers.d/builder
@@ -46,6 +47,8 @@ COPY --chown=builder:builder .smbcredentials $HOME/
 COPY --chown=builder:builder id_rsa $HOME/.ssh/id_rsa.github.com
 
 COPY --chown=builder:builder *.sh $HOME/
+
+RUN /bin/chmod 700 ${HOME}/*.sh
 
 RUN /bin/mkdir -p ${REPO_ROOT_PATH}
 
