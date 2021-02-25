@@ -31,11 +31,9 @@ mount_share
 clone_repository
 
 # This will catch a bad REPO_OS value
-cd "repository/pacman/${REPO_OS}" || { panic "Directory path pacman/${REPO_OS} doesn't exist" 1; }
+cd "repository/pacman/${REPO_OS}/${REPO_DIR}" || { panic "Directory path pacman/${REPO_OS}/${REPO_DIR} doesn't exist" 1; }
 
 sync_pacman
-
-cd ${REPO_DIR} || { panic "Directory ${REPO_DIR} doesn't exist" 1; }
 
 # Force install the tool-chain for Linux
 install_pkg yaul-linux/yaul-tool-chain

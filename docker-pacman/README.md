@@ -16,8 +16,9 @@ could be moved to private repository soon.
        docker run -it --rm --privileged -e REPO_OS=${REPO_OS} yaul-packages:latest ./package-build-$TYPE.sh
 
    Specify a `$TYPE` and `$REPO_OS` from the table below: 
-   | `$TYPE`          | `REPO_OS=linux` | `REPO_OS=mingw-w64` | Description                       |
-   |------------------|-----------------|---------------------|-----------------------------------|
-   | `yaul`           | Y               | Y                   | Build pre-compiled Yaul libraries |
-   | `yaul-examples`  | Y               | Y                   | Bundle uncompiled Yaul examples   |
-   | `yaul-emulators` | N               | Y                   | Bundle pre-compiled emulators     |
+   | `$TYPE`           | `REPO_OS=linux` | `REPO_OS=mingw-w64` | Description                       |
+   |-------------------|-----------------|---------------------|-----------------------------------|
+   | `yaul-tool-chain` | N               | N                   | Build tool-chain                  |
+   | `yaul`            | Y               | Y                   | Build pre-compiled Yaul libraries |
+   | `yaul-examples`   | Y               | Y                   | Bundle uncompiled Yaul examples   |
+   | `yaul-emulators`  | N               | Y                   | Bundle pre-compiled emulators     |

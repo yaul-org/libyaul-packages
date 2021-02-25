@@ -14,8 +14,8 @@ ENV GIT_EMAIL="mrkotfw@gmail.com"
 
 ENV REPO_ROOT_PATH="${HOME}/SMB"
 
-RUN if [ -z "$SMB_SERVER" ]; then echo  "\x1b[1;31mEnvironment variable SMB_SERVER must be specified. Exiting.\x1b[m\n"; exit 1; fi
-RUN if [ -z "$SMB_NAME" ];   then echo  "\x1b[1;31mEnvironment variable SMB_NAME must be specified. Exiting.\x1b[m\n"; exit 1; fi
+RUN if [ -z "$SMB_SERVER" ]; then echo "\x1b[1;31mEnvironment variable SMB_SERVER must be specified. Exiting.\x1b[m\n"; exit 1; fi
+RUN if [ -z "$SMB_NAME" ];   then echo "\x1b[1;31mEnvironment variable SMB_NAME must be specified. Exiting.\x1b[m\n"; exit 1; fi
 
 RUN useradd -m builder
 
