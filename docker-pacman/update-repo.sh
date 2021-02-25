@@ -1,12 +1,7 @@
 #!/bin/bash
 {
-set -x
+source "${HOME}/envs.sh"
 
-source "${HOME}/utils.sh"
-
-[ -z "${REPO_SUBPATH}" ] && { panic "Environment variable REPO_SUBPATH must be specified" 1; }
-[ -z "${REPO_PATH}" ]    && { panic "environment variable REPO_PATH must be specified" 1; }
-[ -z "${REPO_DB}" ]      && { panic "environment variable REPO_DB MUST be specified" 1; }
 [ -z "${REPO_PACKAGE}" ] && { panic "environment variable REPO_PACKAGE MUST be specified" 1; }
 [ -z "${REPO_DIR}" ]     && { panic "Environment variable REPO_DIR must be specified" 1; }
 
@@ -22,7 +17,7 @@ mapfile -t files < <(/usr/bin/find "${REPO_PATH}" -type f \( -name "${REPO_PACKA
 /bin/rm -f ${files[@]}
 
 if ! [ ${#files[@]} -eq 0 ]; then
-    /usr/sbin/repo-remove "${REPO_DB}" "${REPO_PACKAGE}" || { panic "Unable to remove '${file}' from the repository\n" 1; }
+    /usr/sbin/repo-remove "${REPO_DB}" "${REPO_PACKAGE}" || { panic "Unable to remove '${file}' from the repository" 1; }
 fi
 
 if ! [ -e "${REPO_PATH}/${REPO_PACKAGE}-${PKGVER}-"*.pkg.tar.zst ]; then

@@ -2,21 +2,18 @@
 
 set -x
 
-export REPO_SUBPATH="${REPO_OS}/x86_64"
-export REPO_PATH="${REPO_ROOT_PATH}/${REPO_SUBPATH}"
-export REPO_DB="${REPO_PATH}/yaul-${REPO_OS}.db.tar.xz"
+source "${HOME}/envs.sh"
+
 export REPO_PACKAGE="yaul-git"
 export REPO_DIR="yaul"
-
-source "${HOME}/utils.sh"
 
 linux_makepkg() {
     # Unfortunately, there's a bug in the libftdi package. See:
     # <https://bugs.archlinux.org/task/69115>.
-    sudo /usr/sbin/pacman -S --noconfirm libftdi pkg-config
+    install_pkg libftdi pkg-config
     sudo /bin/sed -E -i 's/libftdipp1/libftdi1/g' /usr/lib/pkgconfig/libftdi1.pc
 
-    /usr/sbin/makepkg -sC --noconfirm || { panic "Unable to build package" 1; }
+    make_pkg
 }
 
 mingw_w64_makepkg() {
@@ -27,26 +24,22 @@ mingw_w64_makepkg() {
     # A possible "better" solution would be to create a cross-compilation Yaul
     # PKGBUILD that explicitly depends on mingw-w64-gcc and sets BUILD_CROSS
     # directly to make.
-    sudo /usr/sbin/pacman -S --noconfirm community/mingw-w64-gcc || { panic "Unable to install community/mingw-w64-gcc" 1; }
-
-    BUILD_CROSS=1 /usr/sbin/makepkg -sC --noconfirm || { panic "Unable to build package" 1; }
+    install_pkg community/mingw-w64-gcc
+    BUILD_CROSS=1 make_pkg
 }
 
-[ -z "${REPO_OS}" ] && { panic "Environment variable REPO_OS must be specified" 1; } 
-
-/bin/mount "${REPO_ROOT_PATH}" || { panic "Unable to mount repository mount point" 1; }
-
-/usr/bin/git clone "git@github.com:ijacquez/libyaul-packages" repository || { panic "Unable to clone repository" 1; }
+mount_share
+clone_repository
 
 # This will catch a bad REPO_OS value
 cd "repository/pacman/${REPO_OS}" || { panic "Directory path pacman/${REPO_OS} doesn't exist" 1; }
 
-sudo /usr/sbin/pacman -Syy || { panic "Unable to sync" 1; }
+sync_pacman
 
-pushd ${REPO_DIR} || { panic "Package ${REPO_DIR} doesn't exist" 1; }
+cd ${REPO_DIR} || { panic "Directory ${REPO_DIR} doesn't exist" 1; }
 
 # Force install the tool-chain for Linux
-sudo /usr/sbin/pacman -S --noconfirm yaul-linux/yaul-tool-chain || { panic "Unable to install yaul-tool-chain" 1; }
+install_pkg yaul-linux/yaul-tool-chain
 
 case "${REPO_OS}" in
     "linux")
@@ -61,7 +54,6 @@ case "${REPO_OS}" in
 esac
 
 # There might be a better way, but makepkg updates PKGBUILD's pkgver
-pkgver=$(sed -n -E 's/^pkgver=(.*)$/\1/pg' PKGBUILD 2>/dev/null)
+pkgver=$(extract_pkgver_file "PKGBUILD")
 
 /bin/bash "${HOME}/update-repo.sh" "${pkgver}" || exit 1
-popd || exit 1
