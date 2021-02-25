@@ -11,11 +11,11 @@ could be moved to private repository soon.
            --build-arg SMB_NAME=... \     # SMB share name
            .
 
-2. Once the image is built, update `yaul-git` package by calling
-   `package-build-yaul.sh`.
+2. Once the image is built, run the image in a container.
 
        docker run -it --rm --privileged -e REPO_OS=${REPO_OS} yaul-packages:latest ./package-build-$TYPE.sh
 
+   Specify a `$TYPE` and `$REPO_OS` from the table below: 
    | `$TYPE`          | `REPO_OS=linux` | `REPO_OS=mingw-w64` | Description                       |
    |------------------|-----------------|---------------------|-----------------------------------|
    | `yaul`           | Y               | Y                   | Build pre-compiled Yaul libraries |
