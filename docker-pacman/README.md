@@ -1,5 +1,7 @@
-Building Pacman packages
+Pacman docker
 ===
+
+## Building Pacman packages
 
 These scripts are intended only for [ijacquez](https://github.com/ijacquez), and
 could be moved to private repository soon.
@@ -22,3 +24,21 @@ could be moved to private repository soon.
    | `yaul`            | Y               | Y                   | Build pre-compiled Yaul libraries |
    | `yaul-examples`   | Y               | Y                   | Bundle uncompiled Yaul examples   |
    | `yaul-emulators`  | N               | Y                   | Bundle pre-compiled emulators     |
+
+## Known issues
+
+1. Arch Linux image requires a workaround with glibc in the `Dockerfile`.
+
+2. Package `libftdi` has a [bug](https://bugs.archlinux.org/task/69115) in its
+   `pkg-config` file.
+
+3. MinGW can't build its own `yaul-tool-chain` package, as crosstool-NG requires
+   a case-sensitive filesystem.
+
+   I haven't tested this, but possibly enabling specific directories to be case
+   sensitive might resolve this issue.
+
+       fsutil.exe file setCaseSensitiveInfo 'C:\msys64\path\to\work' enable
+
+4. Linux doesn't have `yaul-emulator-mednafen` and `yaul-emulator-yabause`
+   available.
