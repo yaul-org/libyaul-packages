@@ -1,7 +1,7 @@
 # Maintainer: Israel Jacquez <mrkotfw@gmail.com>
 
 _branch="master"
-_realname=libyaul-tool-chain-git
+_realname=yaul-tool-chain-git
 pkgname=${_realname}
 pkgver=r117.722cc4d
 pkgrel=1
