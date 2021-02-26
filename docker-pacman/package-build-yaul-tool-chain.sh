@@ -4,7 +4,7 @@ set -x
 
 source "${HOME}/envs.sh"
 
-export REPO_PACKAGE="yaul-tool-chain"
+export REPO_PACKAGE="yaul-tool-chain-git"
 export REPO_DIR="yaul-tool-chain"
 
 linux_makepkg() {

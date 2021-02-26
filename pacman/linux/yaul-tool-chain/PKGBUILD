@@ -56,7 +56,7 @@ build() {
 }
 
 package() {
-  /bin/cp -r "${srcdir}/opt" "${pkgver}/"
+  /bin/cp -r "${srcdir}/opt" "${pkgdir}/"
 }
 
 # -*- mode: sh -*-
