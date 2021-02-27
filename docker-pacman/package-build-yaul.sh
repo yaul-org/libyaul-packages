@@ -36,7 +36,7 @@ cd "repository/pacman/${REPO_OS}/${REPO_DIR}" || { panic "Directory path pacman/
 sync_pacman
 
 # Force install the tool-chain for Linux
-install_pkg yaul-linux/yaul-tool-chain
+install_pkg yaul-linux/yaul-tool-chain-git
 
 case "${REPO_OS}" in
     "linux")
