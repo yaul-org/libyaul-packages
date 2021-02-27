@@ -44,6 +44,7 @@ pkgrel=1
 pkgdesc="Tool-chain for Yaul"
 arch=('x86_64')
 url="https://yaul.org/"
+depends=("mingw-w64-x86_64-libwinpthread-git")
 license=('MIT')
 options=('!strip' '!buildflags' 'staticlibs' 'debug')
 
@@ -52,7 +53,8 @@ pkgver() {
 }
 
 package() {
-  /bin/cp -r "${PWD}/opt" "\${pkgdir}/"
+  # It's important that all symbolic links are dereferenced
+  /bin/cp -r -L "${PWD}/opt" "\${pkgdir}/"
 }
 EOF
 
@@ -64,11 +66,11 @@ EOF
 
     rm -f PKGBUILD
 
+    /bin/mv "${REPO_PACKAGE}-"${pkgver}"-1-x86_64.pkg.tar.zst" ../
+
     popd || exit 1
 
     /bin/sed -E -i 's#^pkgver.*$#pkgver='${pkgver}'#g' PKGBUILD
-
-    /bin/mv "${REPO_PACKAGE}-"${pkgver}"-1-x86_64.pkg.tar.zst" ../
 }
 
 mount_share

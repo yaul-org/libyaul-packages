@@ -11,6 +11,8 @@ sync_pacman
 
 cd "repository/pacman/${REPO_DIR}" || { panic "Directory pacman/${REPO_DIR} doesn't exist" 1; }
 
+make_pkg
+
 pkgver=$(extract_pkgver_file "PKGBUILD")
 
 /bin/bash "${HOME}/update-repo.sh" "${pkgver}" || exit 1
