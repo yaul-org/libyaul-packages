@@ -8,8 +8,8 @@ export REPO_PACKAGE="yaul-git"
 export REPO_DIR="yaul"
 
 linux_makepkg() {
-    # Unfortunately, there's a bug in the libftdi package. See:
-    # <https://bugs.archlinux.org/task/69115>.
+    # XXX: Unfortunately, there's a bug in the libftdi package. See:
+    #      <https://bugs.archlinux.org/task/69115>.
     install_pkg libftdi pkg-config
     sudo /bin/sed -E -i 's/libftdipp1/libftdi1/g' /usr/lib/pkgconfig/libftdi1.pc
 
