@@ -8,9 +8,11 @@ could be moved to private repository soon.
 
 1. In the `docker-pacman` directory, build the image.
 
-       docker build --tag yaul-packages \
-           --build-arg SMB_SERVER=... \   # SMB server name or IP where the Pacman repo is shared
-           --build-arg SMB_NAME=... \     # SMB share name
+       docker build \
+           --rm \
+           --tag yaul-packages \
+           --build-arg SMB_SERVER=... \ # SMB server name or IP where the Pacman repo is shared
+           --build-arg SMB_NAME=... \   # SMB share name
            .
 
 2. Once the image is built, run the image in a container.
