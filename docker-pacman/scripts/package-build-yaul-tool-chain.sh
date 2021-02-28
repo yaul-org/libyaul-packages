@@ -66,7 +66,7 @@ EOF
 
     rm -f PKGBUILD
 
-    /bin/mv "${REPO_PACKAGE}-"${pkgver}"-1-x86_64.pkg.tar.zst" ../
+    /bin/mv "${REPO_PACKAGE}-"${pkgver}"-1-${REPO_ARCH}.pkg.tar.zst" ../
 
     popd || exit 1
 

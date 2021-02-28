@@ -46,7 +46,7 @@ COPY --chown=builder:builder .s3cfg $HOME/
 COPY --chown=builder:builder .smbcredentials $HOME/
 COPY --chown=builder:builder id_rsa $HOME/.ssh/id_rsa.github.com
 
-COPY --chown=builder:builder *.sh $HOME/
+COPY --chown=builder:builder scripts/*.sh $HOME/
 
 RUN /bin/chmod 700 ${HOME}/*.sh
 
