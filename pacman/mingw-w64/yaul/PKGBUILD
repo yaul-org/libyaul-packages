@@ -12,7 +12,7 @@ arch=('x86_64')
 url="http://github.com/ijacquez/libyaul"
 license=('MIT')
 depends=("yaul-tool-chain-git" "xorriso" "python")
-makedepends=("make" "gcc" "tar" "gawk" "sed" "findutils" "yaul-tool-chain-git")
+makedepends=("make" "gcc" "tar" "gawk" "sed" "findutils" "git")
 options=('!strip' '!buildflags' '!makeflags' 'staticlibs' '!debug')
 source=("${_realname}"::"git+https://github.com/ijacquez/libyaul#branch=${_branch}")
 sha256sums=('SKIP')

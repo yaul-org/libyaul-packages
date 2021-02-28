@@ -10,7 +10,7 @@ license=('GPLv3')
 depends=("mingw-w64-x86_64-libwinpthread-git")
 makedepends=("tar")
 options=('!strip' '!buildflags' 'staticlibs' '!debug')
-source=("https://github.com/ijacquez/libyaul-packages/releases/download/${pkgver}/tool-chain-MinGW-${arch}-${pkgver}.tar.bz2")
+source=("https://github.com/ijacquez/libyaul-packages/releases/download/${pkgver}/tool-chain-MinGW-${CARCH}-${pkgver}.tar.bz2")
 sha256sums=('71e343c8ae6f4e8fa8299fe5ead41c5ebbca77108c7dd0648d1aba9d071443be')
 noextract=("tool-chain-MinGW-${arch}-${pkgver}.tar.bz2")
 
