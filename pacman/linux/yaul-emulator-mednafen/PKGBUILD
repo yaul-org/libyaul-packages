@@ -1,0 +1,55 @@
+# Maintainer: Israel Jacquez <mrkotfw@gmail.com>
+
+pkgname="yaul-emulator-mednafen"
+pkgver=1.26.1
+pkgrel=1
+pkgdesc="Mednafen is a portable multi-system emulator."
+arch=('x86_64')
+url="https://mednafen.github.io"
+license=('GPLv2')
+depends=("libsndfile" "sdl2")
+makedepends=("make")
+options=('!strip' '!buildflags' 'staticlibs' '!debug')
+source=("mednafen.zip"::"https://mednafen.github.io/releases/files/mednafen-${pkgver}.tar.xz")
+sha256sums=('842907c25c4292c9ba497c9cb9229c7d10e04e22cb4740d154ab690e6587fdf4')
+
+build() {
+  cd "${srcdir}/mednafen"
+
+  ./configure \
+    --prefix="/usr" \
+    --enable-dev-build \
+    --disable-apple2 \
+    --disable-gb \
+    --disable-gba \
+    --disable-lynx \
+    --disable-md \
+    --disable-nes \
+    --disable-ngp \
+    --disable-pce \
+    --disable-pce-fast \
+    --disable-pcfx \
+    --disable-psx \
+    --disable-sms \
+    --disable-snes \
+    --disable-snes-faust \
+    --disable-vb \
+    --disable-wswan \
+    --disable-ssfplay \
+    --disable-altivec \
+    --disable-fancy-scalers \
+    --enable-ss
+
+  /usr/bin/make
+}
+
+package() {
+  cd "${srcdir}/mednafen"
+
+  DESTDIR="${pkgdir}" /usr/bin/make install
+}
+
+# Local Variables:
+# mode: sh
+# sh-basic-offset: 2
+# End:
