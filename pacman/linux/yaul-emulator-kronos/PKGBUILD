@@ -1,0 +1,47 @@
+# Maintainer: Israel Jacquez <mrkotfw@gmail.com>
+
+_branch="extui-align"
+
+pkgname="yaul-emulator-kronos-git"
+pkgver=r1.x
+pkgrel=1
+pkgdesc="Kronos is a Sega Saturn emulator, forked from Yabause."
+arch=('x86_64')
+url="https://github.com/FCare/Kronos"
+license=('GPLv2')
+depends=("qt5-base" "glu")
+makedepends=("cmake")
+options=('!strip' '!buildflags' 'staticlibs' '!debug')
+source=("git+https://github.com/FCare/Kronos#branch=${_branch}")
+sha256sums=('SKIP')
+
+pkgver() {
+  cd "${srcdir}/Kronos"
+
+  printf -- "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse HEAD | sed -r 's/(.{7}).*/\1/')"
+}
+
+build() {
+  cd "${srcdir}/Kronos/yabause"
+
+  mkdir -p build
+  cd build
+
+  /usr/bin/cmake \
+    -DCMAKE_INSTALL_PREFIX="/usr" \
+    -DYAB_WANT_SOFT_RENDERING=ON \
+    ..
+
+  /usr/bin/make
+}
+
+package() {
+  cd "${srcdir}/Kronos/yabause/build"
+
+  DESTDIR="${pkgdir}" /usr/bin/make install
+}
+
+# Local Variables:
+# mode: sh
+# sh-basic-offset: 2
+# End:
