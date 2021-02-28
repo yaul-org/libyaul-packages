@@ -35,7 +35,12 @@ RUN /usr/bin/pacman -Syy --noconfirm && \
         git \
         s3cmd \
         openssh \
-        community/mingw-w64-gcc # Avoid having to install
+        # Required for yaul-tool-chain-git
+        community/mingw-w64-gcc \
+        # Required for yaul-emulator-kronos-git
+        qt5-base \
+        # Required for yaul-emulator-kronos-git
+        glut
 
 # Allow builder to run stuff as root (to install dependencies):
 RUN echo "builder ALL=(ALL) NOPASSWD: ALL" >/etc/sudoers.d/builder

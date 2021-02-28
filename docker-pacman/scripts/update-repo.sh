@@ -20,8 +20,8 @@ if ! [ ${#files[@]} -eq 0 ]; then
     /usr/sbin/repo-remove "${REPO_DB}" "${REPO_PACKAGE}" || { panic "Unable to remove '${file}' from the repository" 1; }
 fi
 
-if ! [ -e "${REPO_PATH}/${REPO_PACKAGE}-${PKGVER}-"*.pkg.tar.zst ]; then
-    /bin/cp ${REPO_PACKAGE}-"${PKGVER}"-*.pkg.tar.zst "${REPO_PATH}/"
+if ! package_exists "${REPO_PACKAGE}" "${PKGVER}"; then
+    /bin/cp ${REPO_PACKAGE}-"${PKGVER}"-*.pkg.tar.zst "${REPO_PATH}"/
     /usr/sbin/repo-add "${REPO_DB}" "${REPO_PATH}/${REPO_PACKAGE}-${PKGVER}"-*.pkg.tar.zst || { panic "Unable to add file to repository" 1; }
 
     if ! /usr/bin/git diff --exit-code --name-only PKGBUILD >/dev/null 2>&1; then
