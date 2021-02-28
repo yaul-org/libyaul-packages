@@ -11,9 +11,13 @@ sync_pacman
 
 cd "repository/pacman/${REPO_DIR}" || { panic "Directory pacman/${REPO_DIR} doesn't exist" 1; }
 
-make_pkg
+old_pkgver=$(extract_pkgver_file "PKGBUILD")
 
-pkgver=$(extract_pkgver_file "PKGBUILD")
+if ! package_exists "${REPO_PACKAGE}" "${old_pkgver}"; then
+    make_pkg
 
-/bin/bash "${HOME}/update-repo.sh" "${pkgver}" || exit 1
+    pkgver=$(extract_pkgver_file "PKGBUILD")
+
+    /bin/bash "${HOME}/update-repo.sh" "${pkgver}" || exit 1
+fi
 }
