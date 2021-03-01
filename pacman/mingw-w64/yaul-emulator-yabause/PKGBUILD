@@ -12,6 +12,7 @@ options=('!strip' '!buildflags' 'staticlibs' '!debug')
 source=("yabause.zip"::"https://download.tuxfamily.org/yabause/releases/${pkgver}/yabause-${pkgver}-win64.zip")
 sha256sums=('ee989be918eb49cce0b046d55775cacfe39d6c9c44a161bcf4539dbdd670c432')
 noextract=("yabause.zip")
+install=install
 
 package() {
   /usr/bin/mkdir -p "${pkgdir}/opt/emulators"
