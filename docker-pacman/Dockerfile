@@ -41,6 +41,8 @@ RUN /usr/bin/pacman -Syy --noconfirm && \
         # Required for yaul-emulator-kronos-git
         glut
 
+RUN echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/builder
+
 USER builder
 
 COPY --chown=builder:builder .s3cfg $HOME/
@@ -49,8 +51,7 @@ COPY --chown=builder:builder id_rsa $HOME/.ssh/id_rsa.github.com
 COPY --chown=builder:builder scripts/*.sh $HOME/
 
 # Allow builder to run stuff as root (to install dependencies):
-RUN echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/builder && \
-    /bin/chmod 700 ${HOME}/*.sh && \
+RUN /bin/chmod 700 ${HOME}/*.sh && \
     /bin/mkdir -p ${REPO_ROOT_PATH} && \
     /bin/mkdir -p ${HOME}/.ssh && \
 \
