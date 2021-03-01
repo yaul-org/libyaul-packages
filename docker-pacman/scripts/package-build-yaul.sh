@@ -33,25 +33,21 @@ clone_repository
 # This will catch a bad REPO_OS value
 cd "repository/pacman/${REPO_OS}/${REPO_DIR}" || { panic "Directory path pacman/${REPO_OS}/${REPO_DIR} doesn't exist" 1; }
 
-old_pkgver=$(extract_pkgver_file "PKGBUILD")
+sync_pacman
 
-if ! package_exists "${REPO_PACKAGE}" "${old_pkgver}"; then
-    sync_pacman
+# Force install the tool-chain for Linux
+install_pkg yaul-linux/yaul-tool-chain-git
 
-    # Force install the tool-chain for Linux
-    install_pkg yaul-linux/yaul-tool-chain-git
+case "${REPO_OS}" in
+    "linux")
+        linux_makepkg
+        ;;
+    "mingw-w64")
+        mingw_w64_makepkg
+        ;;
+esac
 
-    case "${REPO_OS}" in
-        "linux")
-            linux_makepkg
-            ;;
-        "mingw-w64")
-            mingw_w64_makepkg
-            ;;
-    esac
+# There might be a better way, but makepkg updates PKGBUILD's pkgver
+new_pkgver=$(extract_pkgver_file "PKGBUILD")
 
-    # There might be a better way, but makepkg updates PKGBUILD's pkgver
-    new_pkgver=$(extract_pkgver_file "PKGBUILD")
-
-    /bin/bash "${HOME}/update-repo.sh" "${new_pkgver}" || exit 1
-fi
+/bin/bash "${HOME}/update-repo.sh" "${new_pkgver}" || exit 1
