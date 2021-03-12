@@ -5,7 +5,7 @@ _realname=yaul-git
 _install_relpath="opt/tool-chains/sh2eb-elf"
 
 pkgname="${_realname}"
-pkgver=r2038.ab18d1c
+pkgver=r2039.d83c1d8
 pkgrel=1
 pkgdesc="An open source development kit for the SEGA Saturn"
 arch=('x86_64')
