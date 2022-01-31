@@ -43,5 +43,4 @@ could be moved to private repository soon.
 
        fsutil.exe file setCaseSensitiveInfo 'C:\msys64\path\to\work' enable
 
-4. Linux doesn't have `yaul-emulator-mednafen` and `yaul-emulator-yabause`
-   available.
+4. Linux doesn't have `yaul-emulator-yabause` available.
