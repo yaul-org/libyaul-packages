@@ -4,10 +4,13 @@ source "${HOME}/envs.sh"
 
 [ -z "${REPO_PACKAGE}" ] && { panic "environment variable REPO_PACKAGE MUST be specified" 1; }
 [ -z "${REPO_DIR}" ]     && { panic "Environment variable REPO_DIR must be specified" 1; }
+[ -z "${REPO_DB}" ]      && { panic "Environment variable REPO_DB must be specified" 1; }
+[ -z "${REPO_PATH}" ]    && { panic "Environment variable REPO_PATH must be specified" 1; }
+[ -z "${REPO_SUBPATH}" ] && { panic "Environment variable REPO_SUBPATH must be specified" 1; }
 
 PKGVER="${1}"
 
-[ ${#} -eq 1 ] || { panic "Usage: ${0##*/} pkgver" 1; }  
+[ ${#} -eq 1 ] || { panic "Usage: ${0##*/} pkgver" 1; }
 [ -z "${PKGVER}" ] && { panic "Argument PKGVER is invalid" 1; }
 
 trap '/bin/rm '"${REPO_PATH}/${REPO_PACKAGE}-${PKGVER}"'-*.pkg.tar.zst' 1
