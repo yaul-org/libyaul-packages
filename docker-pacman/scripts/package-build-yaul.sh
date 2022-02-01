@@ -13,7 +13,7 @@ linux_makepkg() {
     install_pkg libftdi pkg-config
     sudo /bin/sed -E -i 's/libftdipp1/libftdi1/g' /usr/lib/pkgconfig/libftdi1.pc
 
-    make_pkg
+    make_pkg -sC
 }
 
 mingw_w64_makepkg() {
@@ -24,7 +24,7 @@ mingw_w64_makepkg() {
     # A possible "better" solution would be to create a cross-compilation Yaul
     # PKGBUILD that explicitly depends on mingw-w64-gcc and sets BUILD_CROSS
     # directly to make.
-    BUILD_CROSS=1 make_pkg
+    BUILD_CROSS=1 make_pkg -sC
 }
 
 mount_share

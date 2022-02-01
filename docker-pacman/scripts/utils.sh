@@ -41,8 +41,10 @@ install_pkg() {
 # Make package.
 #
 # Error checking is performed.
+#
+# $@ - Options to makepkg
 make_pkg() {
-    /usr/sbin/makepkg -sC --noconfirm || { panic "Unable to build package" 1; }
+    /usr/sbin/makepkg ${@} --noconfirm || { panic "Unable to build package" 1; }
 }
 
 # Extract package version (pkgver variable) from a given file.
@@ -55,7 +57,7 @@ extract_pkgver_file() {
 
     [ -z "${_file}" ] && { panic "extract_pkgver_file: Invalid argument \$1" 1; }
 
-    /bin/sed -n -E 's/^pkgver=(.*)$/\1/pg' "${_file}" || { panic "Unable to extract package version from ${_file}" 1; } 
+    /bin/sed -n -E 's/^pkgver=(.*)$/\1/pg' "${_file}" || { panic "Unable to extract package version from ${_file}" 1; }
 }
 
 # Determine if the package exists in the repo.

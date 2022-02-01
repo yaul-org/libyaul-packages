@@ -8,7 +8,7 @@ export REPO_PACKAGE="yaul-tool-chain-git"
 export REPO_DIR="yaul-tool-chain"
 
 linux_makepkg() {
-    make_pkg
+    make_pkg -sC
 }
 
 mingw_w64_makepkg() {
@@ -18,7 +18,7 @@ mingw_w64_makepkg() {
 
     pushd libyaul-build-scripts || exit 1
 
-    /bin/cp sh2eb-elf/host-x86_64-w64-mingw32.config .config || exit 1 
+    /bin/cp sh2eb-elf/host-x86_64-w64-mingw32.config .config || exit 1
     /bin/sed -i -E 's#^(CT_DEBUG_CT)=.*#\1=n#g' .config
     /bin/sed -i -E 's#^(CT_DEBUG_INTERACTIVE)=.*#\1=n#g' .config
     /bin/sed -i -E 's#^(CT_LOCAL_TARBALLS_DIR)=.*#\1='${PWD}'/tarballs#g' .config
@@ -44,7 +44,7 @@ pkgrel=1
 pkgdesc="Tool-chain for Yaul"
 arch=('x86_64')
 url="https://yaul.org/"
-depends=("mingw-w64-x86_64-libwinpthread-git")
+depends=("gawk" "sed" "make" "mingw-w64-x86_64-libwinpthread-git")
 license=('MIT')
 options=('!strip' '!buildflags' 'staticlibs' 'debug')
 
@@ -58,7 +58,8 @@ package() {
 }
 EOF
 
-    make_pkg
+    # Avoid installing any dependencies since this is specifically for mingw-w64
+    make_pkg -dC
 
     # Extract the pkgver from the generated PKGBUILD and set it in the real
     # PKGBUILD

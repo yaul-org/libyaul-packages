@@ -11,7 +11,7 @@ sync_pacman
 
 cd "repository/pacman/${REPO_DIR}" || { panic "Directory pacman/${REPO_DIR} doesn't exist" 1; }
 
-make_pkg
+make_pkg -sC
 
 pkgver=$(extract_pkgver_file "PKGBUILD")
 
