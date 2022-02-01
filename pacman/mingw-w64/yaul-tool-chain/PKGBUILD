@@ -1,7 +1,7 @@
 # Maintainer: Israel Jacquez <mrkotfw@gmail.com>
 
 pkgname="yaul-tool-chain"
-pkgver=r119.9c18919
+pkgver=r122.bf1a50e
 pkgrel=1
 pkgdesc="Tool-chain for Yaul"
 arch=('x86_64')
