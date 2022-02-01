@@ -61,7 +61,7 @@ pkgver() {
 
 package() {
   # It's important that all symbolic links are dereferenced
-  /bin/cp -r -L "${PWD}/opt" "\${pkgdir}/"
+  /bin/cp -r -L "${PWD}/libyaul-build-scripts/opt" "\${pkgdir}/"
 
   /usr/bin/mkdir -p "\${pkgdir}/etc/profile.d"
   /usr/bin/install -m 644 "yaul.sh" "\${pkgdir}/etc/profile.d/yaul.sh"
@@ -76,8 +76,6 @@ EOF
     pkgver=$(extract_pkgver_file "PKGBUILD.tmp")
 
     rm -f PKGBUILD.tmp
-
-    /bin/mv "../${REPO_PACKAGE}-"${pkgver}"-1-${REPO_ARCH}.pkg.tar.zst" .
 
     /bin/sed -E -i 's#^pkgver.*$#pkgver='${pkgver}'#g' PKGBUILD
 }
