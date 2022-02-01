@@ -3,7 +3,7 @@
 _branch="master"
 _realname=yaul-tool-chain-git
 pkgname=${_realname}
-pkgver=r117.722cc4d
+pkgver=r122.bf1a50e
 pkgrel=1
 pkgdesc="Tool-chain for Yaul"
 arch=('x86_64')
