@@ -37,39 +37,47 @@ mingw_w64_makepkg() {
 
     crosstool-ng/ct-ng build || exit 1
 
-    cat > PKGBUILD <<EOF
+    commit_count=$(git rev-list --count HEAD)
+    commit_hash=$(git rev-parse HEAD | sed -r 's/(.{7}).*/\1/')
+
+    popd || exit 1
+
+    cat > PKGBUILD.tmp <<EOF
 pkgname=${REPO_PACKAGE}
 pkgver=rx.y
 pkgrel=1
 pkgdesc="Tool-chain for Yaul"
 arch=('x86_64')
 url="https://yaul.org/"
+license=('GPLv3')
 depends=("gawk" "sed" "make" "mingw-w64-x86_64-libwinpthread-git")
-license=('MIT')
+source=("local://yaul.sh")
+sha256sums=('SKIP')
 options=('!strip' '!buildflags' 'staticlibs' 'debug')
 
 pkgver() {
-  printf -- "r%s.%s" "\$(git rev-list --count HEAD)" "\$(git rev-parse HEAD | sed -r 's/(.{7}).*/\1/')"
+  printf -- "r%s.%s" "${commit_count}" "${commit_hash}"
 }
 
 package() {
   # It's important that all symbolic links are dereferenced
   /bin/cp -r -L "${PWD}/opt" "\${pkgdir}/"
+
+  /usr/bin/mkdir -p "\${pkgdir}/etc/profile.d"
+  /usr/bin/install -m 644 "yaul.sh" "\${pkgdir}/etc/profile.d/yaul.sh"
 }
 EOF
 
     # Avoid installing any dependencies since this is specifically for mingw-w64
-    make_pkg -dC
+    make_pkg -dC -p PKGBUILD.tmp
 
     # Extract the pkgver from the generated PKGBUILD and set it in the real
     # PKGBUILD
-    pkgver=$(extract_pkgver_file "PKGBUILD")
+    pkgver=$(extract_pkgver_file "PKGBUILD.tmp")
 
-    rm -f PKGBUILD
+    rm -f PKGBUILD.tmp
 
-    /bin/mv "${REPO_PACKAGE}-"${pkgver}"-1-${REPO_ARCH}.pkg.tar.zst" ../
-
-    popd || exit 1
+    /bin/mv "../${REPO_PACKAGE}-"${pkgver}"-1-${REPO_ARCH}.pkg.tar.zst" .
 
     /bin/sed -E -i 's#^pkgver.*$#pkgver='${pkgver}'#g' PKGBUILD
 }

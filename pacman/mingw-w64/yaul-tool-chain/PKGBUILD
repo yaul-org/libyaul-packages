@@ -5,7 +5,7 @@ pkgver=r122.bf1a50e
 pkgrel=1
 pkgdesc="Tool-chain for Yaul"
 arch=('x86_64')
-url="http://github.com/ijacquez/libyaul-packages"
+url="http://yaul.orgl/"
 license=('GPLv3')
 depends=("gawk" "sed" "make" "mingw-w64-x86_64-libwinpthread-git")
 makedepends=("tar")
@@ -16,8 +16,10 @@ noextract=("tool-chain-MinGW-${arch}-${pkgver}.tar.bz2")
 
 package() {
   /usr/bin/mkdir -p "${pkgdir}/opt/tool-chains"
-
   /usr/bin/tar mxvfjp "tool-chain-MinGW-${arch}-${pkgver}.tar.bz2" -C "${pkgdir}/opt/tool-chains/"
+
+  /usr/bin/mkdir -p "${pkgdir}/etc/profile.d"
+  /usr/bin/install -m 644 "yaul.sh" "${pkgdir}/etc/profile.d/yaul.sh"
 }
 
 # Local Variables:
