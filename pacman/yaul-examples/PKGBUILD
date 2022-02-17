@@ -4,7 +4,7 @@ _branch="develop"
 _realname=yaul-examples-git
 
 pkgname="${_realname}"
-pkgver=r427.dc56db4
+pkgver=r441.25910b9
 pkgrel=1
 pkgdesc="Examples for Yaul (mingw-w64)"
 arch=('x86_64')
