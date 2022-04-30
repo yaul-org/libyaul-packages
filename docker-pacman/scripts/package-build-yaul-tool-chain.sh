@@ -8,11 +8,22 @@ export REPO_PACKAGE="yaul-tool-chain-git"
 export REPO_DIR="yaul-tool-chain"
 
 linux_makepkg() {
+    # XXX: Kludge: There's an error with wget:
+    #              wget: /usr/lib/libc.so.6: version `GLIBC_2.34' not found (required by wget)
+    #
+    #              This error is fixed by running upgrade_pacman. In order to
+    #              avoid this error, we must explicitly install the package
+    #              dependencies here, then upgrade. Once this issue is resolved,
+    #              we can remove this Wa
+    install_pkg make gcc unzip help2man wget
+    upgrade_pacman
+
     make_pkg -sC
 }
 
 mingw_w64_makepkg() {
     install_pkg make gcc unzip help2man wget
+    upgrade_pacman
 
     /usr/bin/git clone --recurse-submodules "git@github.com:ijacquez/libyaul-build-scripts" || { panic "Unable to clone repository" 1; }
 

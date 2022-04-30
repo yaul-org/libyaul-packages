@@ -22,11 +22,18 @@ clone_repository() {
     /usr/bin/git clone "git@github.com:ijacquez/libyaul-packages" repository || { panic "Unable to clone repository" 1; }
 }
 
-# Sync Pacman repositories
+# Sync Pacman repositories.
 #
 # Error checking is performed.
 sync_pacman() {
-    sudo /usr/sbin/pacman -Syyu || { panic "Unable to sync" 1; }
+    sudo /usr/sbin/pacman -Syy || { panic "Unable to sync" 1; }
+}
+
+# Upgrade Pacman repositories
+#
+# Error checking is performed.
+upgrade_pacman() {
+    sudo /usr/sbin/pacman -Syyu --noconfirm || { panic "Unable to upgrade" 1; }
 }
 
 # Install package.
