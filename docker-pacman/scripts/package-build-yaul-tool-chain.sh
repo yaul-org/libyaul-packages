@@ -14,7 +14,7 @@ linux_makepkg() {
 mingw_w64_makepkg() {
     install_pkg make gcc unzip help2man wget
 
-    /usr/bin/git clone --recursive "git@github.com:ijacquez/libyaul-build-scripts" || { panic "Unable to clone repository" 1; }
+    /usr/bin/git clone --recurse-submodules "git@github.com:ijacquez/libyaul-build-scripts" || { panic "Unable to clone repository" 1; }
 
     pushd libyaul-build-scripts || exit 1
 

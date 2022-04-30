@@ -8,16 +8,16 @@ could be moved to private repository soon.
 
 1. In the `docker-pacman` directory, build the image.
 
-       docker build \
-           --rm \
-           --tag yaul-packages \
-           --build-arg SMB_SERVER=... \ # SMB server name or IP where the Pacman repo is shared
-           --build-arg SMB_NAME=... \   # SMB share name
-           .
+        docker build \
+            --rm \
+            --tag yaul-packages \
+            --build-arg SMB_SERVER=... \ # SMB server name or IP where the Pacman repo is shared
+            --build-arg SMB_NAME=... \   # SMB share name
+            .
 
 2. Once the image is built, run the image in a container.
 
-       docker run -it --rm --privileged -e REPO_OS=${REPO_OS} yaul-packages:latest ./package-build-$TYPE.sh
+        docker run -it --rm --privileged -e REPO_OS=${REPO_OS} yaul-packages:latest ./package-build-$TYPE.sh
 
    Specify a `$TYPE` and `$REPO_OS` from the table below:
 
@@ -41,6 +41,6 @@ could be moved to private repository soon.
    I haven't tested this, but possibly enabling specific directories to be case
    sensitive might resolve this issue.
 
-       fsutil.exe file setCaseSensitiveInfo 'C:\msys64\path\to\work' enable
+        fsutil.exe file setCaseSensitiveInfo 'C:\msys64\path\to\work' enable
 
 4. Linux doesn't have `yaul-emulator-yabause` available.

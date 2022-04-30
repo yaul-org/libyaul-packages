@@ -7,5 +7,5 @@ set -x
 set -e
 
 for os in "linux" "mingw-w64"; do
-    docker run -it --rm --privileged -e REPO_OS="${os}" yaul-packages:latest ./package-build-yaul.sh
+    docker run -it --rm --privileged -e REPO_OS="${os}" yaul-packages:latest ./package-build-yaul-tool-chain.sh
 done

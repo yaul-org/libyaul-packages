@@ -26,7 +26,7 @@ clone_repository() {
 #
 # Error checking is performed.
 sync_pacman() {
-    sudo /usr/sbin/pacman -Syy || { panic "Unable to sync" 1; }
+    sudo /usr/sbin/pacman -Syyu || { panic "Unable to sync" 1; }
 }
 
 # Install package.
