@@ -15,7 +15,7 @@ linux_makepkg() {
     #              avoid this error, we must explicitly install the package
     #              dependencies here, then upgrade. Once this issue is resolved,
     #              we can remove this Wa
-    install_pkg make gcc unzip help2man wget
+    install_pkg make gcc unzip help2man wget git
     upgrade_pacman
 
     make_pkg -sC
