@@ -61,6 +61,10 @@ pkgver() {
 }
 
 package() {
+  # XXX: Kludge: This needs to be fixed
+  rm -f "${PWD}/libyaul-build-scripts/opt/tool-chains/sh2eb-elf/lib/bfd-plugins/liblto_plugin.so"
+  ln -s -f "../../libexec/gcc/sh2eb-elf/11.2.0/liblto_plugin.dll" "${PWD}/libyaul-build-scripts/opt/tool-chains/sh2eb-elf/lib/bfd-plugins/liblto_plugin.so"
+
   # It's important that all symbolic links are dereferenced
   /bin/cp -r -L "${PWD}/libyaul-build-scripts/opt" "\${pkgdir}/"
 
