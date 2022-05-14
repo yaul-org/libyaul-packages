@@ -8,13 +8,6 @@ panic() {
     exit "${2}"
 }
 
-# Mount the share where the local Pacman repository is stored.
-#
-# Error checking is performed.
-mount_share() {
-    /bin/mount "${REPO_ROOT_PATH}" || { panic "Unable to mount repository mount point" 1; }
-}
-
 # Clone the libyaul-packages repo.
 #
 # Error checking is performed.

@@ -85,7 +85,7 @@ EOF
     /bin/sed -E -i 's#^pkgver.*$#pkgver='${pkgver}'#g' PKGBUILD
 }
 
-mount_share
+/bin/bash -x "${HOME}/s3mirror.sh" "${REPO_SUBPATH}" || exit 1
 clone_repository
 
 # This will catch a bad REPO_OS value

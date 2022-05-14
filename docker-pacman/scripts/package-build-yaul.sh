@@ -27,7 +27,7 @@ mingw_w64_makepkg() {
     BUILD_CROSS=1 make_pkg -sC
 }
 
-mount_share
+/bin/bash -x "${HOME}/s3mirror.sh" "${REPO_SUBPATH}" || exit 1
 clone_repository
 
 # This will catch a bad REPO_OS value

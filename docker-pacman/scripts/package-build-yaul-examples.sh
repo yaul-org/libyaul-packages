@@ -5,7 +5,7 @@ source "${HOME}/envs.sh"
 export REPO_PACKAGE="yaul-examples-git"
 export REPO_DIR="yaul-examples"
 
-mount_share
+/bin/bash -x "${HOME}/s3mirror.sh" "${REPO_SUBPATH}" || exit 1
 clone_repository
 sync_pacman
 

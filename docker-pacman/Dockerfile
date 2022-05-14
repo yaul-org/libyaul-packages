@@ -2,19 +2,13 @@ FROM archlinux:latest
 
 MAINTAINER Israel Jacquez <mrkotfw@gmail.com>
 
-ARG SMB_SERVER
-ARG SMB_NAME
-
 ENV HOME /home/builder
 
 ENV GIT_USERNAME="ijacquez"
 ENV GIT_NAME="Israel Jacquez"
 ENV GIT_EMAIL="mrkotfw@gmail.com"
 
-ENV REPO_ROOT_PATH="${HOME}/SMB"
-
-RUN if [ -z "$SMB_SERVER" ]; then echo "Environment variable SMB_SERVER must be specified.\n"; exit 1; fi
-RUN if [ -z "$SMB_NAME" ];   then echo "Environment variable SMB_NAME must be specified."; exit 1; fi
+ENV REPO_ROOT_PATH="${HOME}/s3"
 
 RUN useradd -m builder
 
@@ -41,7 +35,6 @@ RUN echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/builder
 USER builder
 
 COPY --chown=builder:builder .s3cfg $HOME/
-COPY --chown=builder:builder .smbcredentials $HOME/
 COPY --chown=builder:builder id_rsa $HOME/.ssh/id_rsa.github.com
 COPY --chown=builder:builder scripts/*.sh $HOME/
 
@@ -58,9 +51,6 @@ RUN /bin/chmod 700 ${HOME}/*.sh && \
     echo $'[user]\n\
         name = '$GIT_NAME$'\n\
         email = '$GIT_EMAIL >> "${HOME}/.gitconfig" && \
-\
-    sudo -E /bin/sh -c 'echo "//${SMB_SERVER}/${SMB_NAME} ${REPO_ROOT_PATH} cifs users,credentials=$HOME/.smbcredentials,iocharset=utf8,uid=builder,gid=builder 0 0"\
->> /etc/fstab' && \
 \
     sudo -E /bin/sh -c 'printf -- "\n\
 [yaul-linux]\n\

@@ -25,7 +25,7 @@ mingw_w64_build_yabause() {
     popd || exit 1
 }
 
-mount_share
+/bin/bash -x "${HOME}/s3mirror.sh" "${REPO_SUBPATH}" || exit 1
 clone_repository
 sync_pacman
 
