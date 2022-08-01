@@ -6,7 +6,8 @@ set -x
 
 set -e
 
-REPO_BRANCH="${1:=master}"
+REPO_BRANCH=${1}
+REPO_BRANCH="${REPO_BRANCH:=master}"
 
 # Sanity checks
 [ -f "base/.s3cfg" ]      || { printf -- "File \"base/.s3cfg\" does not exist\n" >&2; exit 1; }

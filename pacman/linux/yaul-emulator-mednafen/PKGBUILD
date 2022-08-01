@@ -11,7 +11,7 @@ depends=("libsndfile" "sdl2")
 makedepends=("make")
 options=('!strip' '!buildflags' 'staticlibs' '!debug')
 source=("mednafen.zip"::"https://mednafen.github.io/releases/files/mednafen-${pkgver}.tar.xz")
-sha256sums=('842907c25c4292c9ba497c9cb9229c7d10e04e22cb4740d154ab690e6587fdf4')
+sha256sums=('da3fbcf02877f9be0f028bfa5d1cb59e953a4049b90fe7e39388a3386d9f362e')
 
 build() {
   cd "${srcdir}/mednafen"

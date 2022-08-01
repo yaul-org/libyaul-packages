@@ -10,7 +10,7 @@ license=('GPLv2')
 makedepends=("unzip")
 options=('!strip' '!buildflags' 'staticlibs' '!debug')
 source=("mednafen.zip"::"https://mednafen.github.io/releases/files/mednafen-${pkgver}-win64.zip")
-sha256sums=('1d776e9355208c2fc81bea5ce036e955c5aea02f1176dc311df0a74ec17e6b48')
+sha256sums=('26c6676354d44e7d2c31b002f0abb097940e0846e449ed080fb79e6b64db0be2')
 noextract=("mednafen.zip")
 install=install
 
