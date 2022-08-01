@@ -26,7 +26,7 @@ build() {
 
   /usr/bin/cmake \
     -DCMAKE_INSTALL_PREFIX="/opt/kronos" \
-    -H kronos \
+    -S yabause \
     -B Release
 
   cd Release
