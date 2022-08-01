@@ -3,7 +3,7 @@
 _branch="extui-align"
 
 pkgname="yaul-emulator-kronos-git"
-pkgver=r6618.d48f332
+pkgver=r7027.29205c6
 pkgrel=1
 pkgdesc="Kronos is a Sega Saturn emulator, forked from Yabause."
 arch=('x86_64')
