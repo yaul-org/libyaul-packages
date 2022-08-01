@@ -22,21 +22,19 @@ pkgver() {
 }
 
 build() {
-  cd "${srcdir}/Kronos/yabause"
-
-  mkdir -p build
-  cd build
+  cd "${srcdir}/Kronos"
 
   /usr/bin/cmake \
-    -DCMAKE_INSTALL_PREFIX="/usr" \
-    -DYAB_WANT_SOFT_RENDERING=ON \
-    ..
+    -DCMAKE_INSTALL_PREFIX="/opt/kronos" \
+    -H yabause \
+    -B Release
 
+  cd Release
   /usr/bin/make
 }
 
 package() {
-  cd "${srcdir}/Kronos/yabause/build"
+  cd "${srcdir}/Kronos/Release"
 
   DESTDIR="${pkgdir}" /usr/bin/make install
 }

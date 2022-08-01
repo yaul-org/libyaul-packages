@@ -1,8 +1,8 @@
 #!/bin/bash
-
+{
 set -x
 
-source "${HOME}/envs.sh"
+source "${REPO_BASEPATH}/scripts/envs.sh" || exit 1
 
 export REPO_PACKAGE="yaul-tool-chain-git"
 export REPO_DIR="yaul-tool-chain"
@@ -85,11 +85,14 @@ EOF
     /bin/sed -E -i 's#^pkgver.*$#pkgver='${pkgver}'#g' PKGBUILD
 }
 
-/bin/bash -x "${HOME}/s3mirror.sh" "${REPO_SUBPATH}" || exit 1
-clone_repository
+mkdir -p "${REPO_BASEPATH}/s3"
+
+cd "${REPO_BASEPATH}" || exit 1
+/bin/bash -x "${REPO_BASEPATH}/scripts/s3mirror.sh" "${REPO_SUBPATH}" || exit 1
+clone_repository "${REPO_BRANCH}"
 
 # This will catch a bad REPO_OS value
-cd "repository/pacman/${REPO_OS}/${REPO_DIR}" || { panic "Directory path pacman/${REPO_OS}/${REPO_DIR} doesn't exist" 1; }
+cd "${REPO_BASEPATH}/repository/pacman/${REPO_OS}/${REPO_DIR}" || { panic "Directory path pacman/${REPO_OS}/${REPO_DIR} doesn't exist" 1; }
 
 sync_pacman
 
@@ -105,4 +108,5 @@ esac
 # There might be a better way, but makepkg updates PKGBUILD's pkgver
 new_pkgver=$(extract_pkgver_file "PKGBUILD")
 
-/bin/bash "${HOME}/update-repo.sh" "${new_pkgver}" || exit 1
+/bin/bash "${REPO_BASEPATH}/scripts/update-repo.sh" "${new_pkgver}" || exit 1
+}

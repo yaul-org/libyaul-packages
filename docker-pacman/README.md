@@ -10,12 +10,12 @@ could be moved to private repository soon.
 
         docker build \
             --rm \
-            --tag yaul-packages \
+            --tag ijacquez/yaul-packages \
             .
 
 2. Once the image is built, run the image in a container.
 
-        docker run -it --rm --privileged -e REPO_OS=${REPO_OS} yaul-packages:latest ./package-build-$TYPE.sh
+        docker run -it --rm --privileged -e REPO_OS=${REPO_OS} ijacquez/yaul-packages:latest ./package-build-$TYPE.sh
 
    Specify a `$TYPE` and `$REPO_OS` from the table below:
 

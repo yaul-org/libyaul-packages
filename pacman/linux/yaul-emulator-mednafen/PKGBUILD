@@ -1,7 +1,7 @@
 # Maintainer: Israel Jacquez <mrkotfw@gmail.com>
 
 pkgname="yaul-emulator-mednafen"
-pkgver=1.26.1
+pkgver=1.29.0
 pkgrel=1
 pkgdesc="Mednafen is a portable multi-system emulator."
 arch=('x86_64')

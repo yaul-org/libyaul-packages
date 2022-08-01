@@ -1,11 +1,11 @@
 # Maintainer: Israel Jacquez <mrkotfw@gmail.com>
 
 _branch="develop"
-_realname=yaul-git
+_realname=yaul
 _install_relpath="opt/tool-chains/sh2eb-elf"
 
 pkgname="${_realname}"
-pkgver=r2303.79cc598
+pkgver=1.0.0
 pkgrel=1
 pkgdesc="An open source development kit for the SEGA Saturn"
 arch=('x86_64')
@@ -30,7 +30,7 @@ _change_env_value() {
 pkgver() {
   cd "${srcdir}/${_realname}"
 
-  printf -- "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse HEAD | sed -r 's/(.{7}).*/\1/')"
+  cat VERSION | tr -d '\n'
 }
 
 prepare() {
@@ -59,7 +59,7 @@ build() {
 
   if check_option "debug" "y"; then
     (source "${srcdir}/yaul.env.build"; SILENT= /usr/bin/make -j 1 debug tools)
-  else                                          
+  else
     (source "${srcdir}/yaul.env.build"; SILENT= /usr/bin/make -j 1 release tools)
   fi
 }
