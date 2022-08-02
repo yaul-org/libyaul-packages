@@ -10,9 +10,8 @@ RUN useradd -m builder
 
 WORKDIR $HOME
 
-RUN /usr/bin/pacman -Syyu --noconfirm
-
-RUN /usr/bin/pacman -Syy --noconfirm && \
+RUN /usr/bin/pacman -Syyu --noconfirm && \
+    /usr/bin/pacman -Syy --noconfirm && \
     /usr/bin/pacman -S --noconfirm \
         base-devel \
         cifs-utils \
@@ -24,9 +23,8 @@ RUN /usr/bin/pacman -Syy --noconfirm && \
         # Required for yaul-emulator-kronos-git
         qt5-base \
         # Required for yaul-emulator-kronos-git
-        glut
-
-RUN echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/builder
+        glut && \
+    echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/builder
 
 USER builder
 
