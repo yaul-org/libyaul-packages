@@ -8,17 +8,17 @@ could be moved to private repository soon.
 
 1. In the `docker-pacman` directory, build the image.
 
-        docker build \
-            --rm \
-            --tag ijacquez/yaul-packages \
-            .
+       docker build \
+           --rm \
+           --tag ijacquez/yaul-packages \
+           .
 
 2. Once the image is built, run one of the scripts
 
-        ./update-yaul.sh
-        ./update-yaul-examples.sh 
-        ./update-yaul-emulators.sh
-        ./update-yaul-tool-chain.sh
+       ./update-yaul.sh
+       ./update-yaul-examples.sh 
+       ./update-yaul-emulators.sh
+       ./update-yaul-tool-chain.sh
 
 ## Known issues
 
