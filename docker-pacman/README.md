@@ -16,7 +16,7 @@ could be moved to private repository soon.
 2. Once the image is built, run one of the scripts
 
        ./update-yaul.sh
-       ./update-yaul-examples.sh 
+       ./update-yaul-examples.sh
        ./update-yaul-emulators.sh
        ./update-yaul-tool-chain.sh
 
