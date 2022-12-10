@@ -10,7 +10,7 @@ arch=('x86_64')
 url="https://github.com/FCare/Kronos"
 license=('GPLv2')
 depends=("qt5-base" "qt5-multimedia" "glu")
-makedepends=("cmake" "git")
+makedepends=("cmake" "git" "qt5-base")
 options=('!strip' '!buildflags' 'staticlibs' '!debug')
 source=("git+https://github.com/FCare/Kronos#branch=${_branch}")
 sha256sums=('SKIP')
