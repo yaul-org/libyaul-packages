@@ -2,9 +2,10 @@
 {
 source "${REPO_BASEPATH}/scripts/envs.sh"
 
-[ -z "${REPO_PACKAGE}" ]  && { panic "environment variable REPO_PACKAGE MUST be specified" 1; }
-[ -z "${REPO_DIR}" ]      && { panic "Environment variable REPO_DIR must be specified" 1; }
 [ -z "${REPO_DB}" ]       && { panic "Environment variable REPO_DB must be specified" 1; }
+[ -z "${REPO_DIR}" ]      && { panic "Environment variable REPO_DIR must be specified" 1; }
+[ -z "${REPO_OS}" ]       && { panic "Environment variable REPO_OS must be specified" 1; }
+[ -z "${REPO_PACKAGE}" ]  && { panic "environment variable REPO_PACKAGE MUST be specified" 1; }
 [ -z "${REPO_ROOTPATH}" ] && { panic "Environment variable REPO_ROOTPATH must be specified" 1; }
 [ -z "${REPO_SUBPATH}" ]  && { panic "Environment variable REPO_SUBPATH must be specified" 1; }
 
@@ -28,7 +29,7 @@ if ! package_exists "${REPO_PACKAGE}" "${PKGVER}"; then
     /usr/sbin/repo-add "${REPO_DB}" "${REPO_ROOTPATH}/${REPO_PACKAGE}-${PKGVER}"-*.pkg.tar.zst || { panic "Unable to add file to repository" 1; }
 
     if ! /usr/bin/git diff --exit-code --name-only PKGBUILD >/dev/null 2>&1; then
-        /usr/bin/git commit PKGBUILD -m "Update package version for ${REPO_PACKAGE} ${PKGVER}" || { panic "Unable to commit changes" 1; }
+        /usr/bin/git commit PKGBUILD -m "Update package version for ${REPO_PACKAGE} ${PKGVER} (${REPO_OS})" || { panic "Unable to commit changes" 1; }
         /usr/bin/git push origin -u master || { panic "Unable to push commits" 1; }
     fi
 fi
