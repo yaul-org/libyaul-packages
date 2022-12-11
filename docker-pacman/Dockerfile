@@ -10,21 +10,17 @@ RUN useradd -m builder
 
 WORKDIR $HOME
 
+# These are fixes from:
+# <https://github.com/sickcodes/Docker-OSX/issues/485#issuecomment-1105978096>
+RUN yes | /usr/bin/pacman-key --init && \
+    yes | /usr/bin/pacman-key --populate archlinux
+
 RUN /usr/bin/pacman -Syyu --noconfirm && \
-    /usr/bin/pacman -Syy --noconfirm && \
-    /usr/bin/pacman -S --noconfirm \
-        base-devel \
-        cifs-utils \
-        git \
-        s3cmd \
-        openssh \
-        # Required for yaul-tool-chain-git
-        community/mingw-w64-gcc \
-        # Required for yaul-emulator-kronos-git
-        qt5-base \
-        # Required for yaul-emulator-kronos-git
-        glut && \
-    echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/builder
+    /usr/bin/pacman -Syy --noconfirm
+
+RUN /usr/bin/pacman -S --noconfirm base-devel cifs-utils git s3cmd openssh
+
+RUN echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/builder
 
 USER builder
 
