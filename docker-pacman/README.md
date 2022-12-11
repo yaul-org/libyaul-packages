@@ -34,3 +34,5 @@ could be moved to private repository soon.
        fsutil.exe file setCaseSensitiveInfo 'C:\msys64\path\to\work' enable
 
 3. Linux doesn't have `yaul-emulator-yabause` available.
+
+4. MinGW doesn't have `yaul-emulator-kronos` available.
