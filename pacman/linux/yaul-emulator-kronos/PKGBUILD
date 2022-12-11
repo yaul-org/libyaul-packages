@@ -9,8 +9,8 @@ pkgdesc="Kronos is a Sega Saturn emulator, forked from Yabause."
 arch=('x86_64')
 url="https://github.com/FCare/Kronos"
 license=('GPLv2')
-depends=("qt5-base" "qt5-multimedia" "glu")
-makedepends=("cmake" "git" "qt5-base")
+depends=("qt5-base" "qt5-multimedia" "glu" "glut")
+makedepends=("cmake" "git" "qt5-base" "glut")
 options=('!strip' '!buildflags' 'staticlibs' '!debug')
 source=("git+https://github.com/FCare/Kronos#branch=${_branch}")
 sha256sums=('SKIP')
