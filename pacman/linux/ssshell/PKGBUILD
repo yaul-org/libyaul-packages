@@ -1,13 +1,13 @@
 # Maintainer: Israel Jacquez <mrkotfw@gmail.com>
 
 _branch="master"
-_realname=ssshell-git
+_realname=ssshell
 _install_relpath="opt/tool-chains/sh2eb-elf"
 
 pkgname="${_realname}"
-pkgver=r2197.0f5f4c2
+pkgver=
 pkgrel=1
-pkgdesc="An open source development kit for the SEGA Saturn"
+pkgdesc="Sega Saturn Shell"
 arch=('x86_64')
 url="http://github.com/ijacquez/ssshell"
 license=('MIT')
@@ -20,19 +20,23 @@ sha256sums=('SKIP')
 pkgver() {
   cd "${srcdir}/${_realname}"
 
-  printf -- "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse HEAD | sed -r 's/(.{7}).*/\1/')"
+  cat VERSION | tr -d '\n'
 }
 
 prepare() {
   cd "${srcdir}/${_realname}"
+  meson -C --prefix "${pkgdir}/${_install_relpath}" build
 }
 
 build() {
   cd "${srcdir}/${_realname}"
+  cd build
+  ninja
 }
 
 package() {
   cd "${srcdir}/${_realname}"
+  ninja install
 }
 
 # Local Variables:
