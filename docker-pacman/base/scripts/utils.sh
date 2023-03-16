@@ -8,25 +8,33 @@ panic() {
     exit "${2}"
 }
 
-# Mount the share where the local Pacman repository is stored.
-#
-# Error checking is performed.
-mount_share() {
-    /bin/mount "${REPO_ROOT_PATH}" || { panic "Unable to mount repository mount point" 1; }
-}
-
 # Clone the libyaul-packages repo.
 #
 # Error checking is performed.
+# $1 - The branch
 clone_repository() {
-    /usr/bin/git clone "git@github.com:ijacquez/libyaul-packages" repository || { panic "Unable to clone repository" 1; }
+    local _branch="${1}"
+
+    cd repository >/dev/null 2>&1 || /usr/bin/git clone -b "${_branch}" "git@github.com:ijacquez/libyaul-packages" repository || { panic "Unable to clone repository" 1; }
+    cd repository >/dev/null 2>&1 || true
+    git fetch origin -p
+    git checkout -B "${_branch}"
+    git reset --hard origin/"${_branch}"
+    git clean -f -d -x
 }
 
-# Sync Pacman repositories
+# Sync Pacman repositories.
 #
 # Error checking is performed.
 sync_pacman() {
     sudo /usr/sbin/pacman -Syy || { panic "Unable to sync" 1; }
+}
+
+# Upgrade Pacman repositories
+#
+# Error checking is performed.
+upgrade_pacman() {
+    sudo /usr/sbin/pacman -Syyu --noconfirm || { panic "Unable to upgrade" 1; }
 }
 
 # Install package.
@@ -73,7 +81,7 @@ package_exists() {
     [ -z "${_package}" ] && { panic "package_exists: Invalid argument \$1" 1; }
     [ -z "${_pkgver}" ]  && { panic "package_exists: Invalid argument \$2" 1; }
 
-    [ -f "${REPO_PATH}/${_package}-${_pkgver}-${_pkgrel}-${REPO_ARCH}.pkg.tar.zst" ]
+    [ -f "${REPO_ROOTPATH}/${_package}-${_pkgver}-${_pkgrel}-${REPO_ARCH}.pkg.tar.zst" ]
 }
 
 [ "${0##*/}" = "${BASH_SOURCE[0]##*/}" ] && { panic "Do not execute ${0##*/} directly" 1; }

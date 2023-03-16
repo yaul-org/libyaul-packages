@@ -3,14 +3,14 @@
 _branch="extui-align"
 
 pkgname="yaul-emulator-kronos-git"
-pkgver=r6618.d48f332
+pkgver=r7072.48b93ce
 pkgrel=1
 pkgdesc="Kronos is a Sega Saturn emulator, forked from Yabause."
 arch=('x86_64')
 url="https://github.com/FCare/Kronos"
 license=('GPLv2')
-depends=("qt5-base" "glu")
-makedepends=("cmake" "git")
+depends=("qt5-base" "qt5-multimedia" "glu" "glut")
+makedepends=("cmake" "git" "qt5-base" "glut")
 options=('!strip' '!buildflags' 'staticlibs' '!debug')
 source=("git+https://github.com/FCare/Kronos#branch=${_branch}")
 sha256sums=('SKIP')
@@ -22,21 +22,19 @@ pkgver() {
 }
 
 build() {
-  cd "${srcdir}/Kronos/yabause"
-
-  mkdir -p build
-  cd build
+  cd "${srcdir}/Kronos"
 
   /usr/bin/cmake \
-    -DCMAKE_INSTALL_PREFIX="/usr" \
-    -DYAB_WANT_SOFT_RENDERING=ON \
-    ..
+    -DCMAKE_INSTALL_PREFIX="/opt/kronos" \
+    -S yabause \
+    -B Release
 
+  cd Release
   /usr/bin/make
 }
 
 package() {
-  cd "${srcdir}/Kronos/yabause/build"
+  cd "${srcdir}/Kronos/Release"
 
   DESTDIR="${pkgdir}" /usr/bin/make install
 }

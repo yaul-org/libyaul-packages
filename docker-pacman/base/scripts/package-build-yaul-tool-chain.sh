@@ -1,8 +1,8 @@
 #!/bin/bash
-
+{
 set -x
 
-source "${HOME}/envs.sh"
+source "${REPO_BASEPATH}/scripts/envs.sh" || exit 1
 
 export REPO_PACKAGE="yaul-tool-chain-git"
 export REPO_DIR="yaul-tool-chain"
@@ -13,8 +13,9 @@ linux_makepkg() {
 
 mingw_w64_makepkg() {
     install_pkg make gcc unzip help2man wget
+    upgrade_pacman
 
-    /usr/bin/git clone --recursive "git@github.com:ijacquez/libyaul-build-scripts" || { panic "Unable to clone repository" 1; }
+    /usr/bin/git clone --recurse-submodules "git@github.com:ijacquez/libyaul-build-scripts" || { panic "Unable to clone repository" 1; }
 
     pushd libyaul-build-scripts || exit 1
 
@@ -60,6 +61,10 @@ pkgver() {
 }
 
 package() {
+  # XXX: Kludge: This needs to be fixed
+  rm -f "${PWD}/libyaul-build-scripts/opt/tool-chains/sh2eb-elf/lib/bfd-plugins/liblto_plugin.so"
+  ln -s -f "../../libexec/gcc/sh2eb-elf/11.2.0/liblto_plugin.dll" "${PWD}/libyaul-build-scripts/opt/tool-chains/sh2eb-elf/lib/bfd-plugins/liblto_plugin.so"
+
   # It's important that all symbolic links are dereferenced
   /bin/cp -r -L "${PWD}/libyaul-build-scripts/opt" "\${pkgdir}/"
 
@@ -80,11 +85,14 @@ EOF
     /bin/sed -E -i 's#^pkgver.*$#pkgver='${pkgver}'#g' PKGBUILD
 }
 
-mount_share
-clone_repository
+mkdir -p "${REPO_BASEPATH}/s3"
+
+cd "${REPO_BASEPATH}" || exit 1
+/bin/bash -x "${REPO_BASEPATH}/scripts/s3mirror.sh" "${REPO_SUBPATH}" || exit 1
+clone_repository "${REPO_BRANCH}"
 
 # This will catch a bad REPO_OS value
-cd "repository/pacman/${REPO_OS}/${REPO_DIR}" || { panic "Directory path pacman/${REPO_OS}/${REPO_DIR} doesn't exist" 1; }
+cd "${REPO_BASEPATH}/repository/pacman/${REPO_OS}/${REPO_DIR}" || { panic "Directory path pacman/${REPO_OS}/${REPO_DIR} doesn't exist" 1; }
 
 sync_pacman
 
@@ -100,4 +108,5 @@ esac
 # There might be a better way, but makepkg updates PKGBUILD's pkgver
 new_pkgver=$(extract_pkgver_file "PKGBUILD")
 
-/bin/bash "${HOME}/update-repo.sh" "${new_pkgver}" || exit 1
+/bin/bash "${REPO_BASEPATH}/scripts/update-repo.sh" "${new_pkgver}" || exit 1
+}
