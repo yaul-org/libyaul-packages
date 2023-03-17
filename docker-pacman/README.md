@@ -19,6 +19,7 @@ could be moved to private repository soon.
        ./update-yaul-examples.sh
        ./update-yaul-emulators.sh
        ./update-yaul-tool-chain.sh
+       ./update-ssshell.sh
 
 ## Known issues
 
