@@ -11,8 +11,8 @@ pkgdesc="Sega Saturn Shell"
 arch=('x86_64')
 url="http://github.com/ijacquez/ssshell"
 license=('MIT')
-depends=("libftdi" "readline")
-makedepends=("git" "meson" "ninja" "gcc" "libftdi" "readline")
+depends=("mingw-w64-x86_64-libftdi" "mingw-w64-x86_64-readline")
+makedepends=("git" "meson" "ninja" "gcc" "mingw-w64-x86_64-libftdi" "mingw-w64-x86_64-readline")
 options=('!strip' '!buildflags' '!makeflags' '!staticlibs' '!debug')
 source=("${_realname}"::"git+https://github.com/ijacquez/ssshell#branch=${_branch}")
 sha256sums=('SKIP')
