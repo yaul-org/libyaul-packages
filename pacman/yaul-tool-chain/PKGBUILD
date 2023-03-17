@@ -3,14 +3,14 @@
 _branch="master"
 _realname=yaul-tool-chain-git
 pkgname=${_realname}
-pkgver=r132.00b3688
+pkgver=r134.06fb0e6
 pkgrel=1
 pkgdesc="Tool-chain for Yaul"
 arch=('x86_64')
 url="https://yaul.org/"
 license=('MIT')
 depends=("gawk" "sed" "make")
-makedepends=("make" "gcc" "unzip" "help2man" "wget" "git" "community/mingw-w64-gcc")
+makedepends=("make" "gcc" "unzip" "help2man" "wget" "git" "mingw-w64-gcc")
 options=('!strip' '!buildflags' 'staticlibs' 'debug')
 source=("git+https://github.com/ijacquez/libyaul-build-scripts#branch=${_branch}" "local://yaul.sh")
 sha256sums=('SKIP' 'SKIP')
