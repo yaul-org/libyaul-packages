@@ -18,7 +18,7 @@ RUN yes | /usr/bin/pacman-key --init && \
 RUN /usr/bin/pacman -Syyu --noconfirm && \
     /usr/bin/pacman -Syy --noconfirm
 
-RUN /usr/bin/pacman -S --noconfirm base-devel cifs-utils git s3cmd openssh
+RUN /usr/bin/pacman -S --noconfirm base-devel git s3cmd openssh
 
 RUN echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/builder
 

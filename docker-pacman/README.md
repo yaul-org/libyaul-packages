@@ -6,7 +6,7 @@ Pacman docker
 These scripts are intended only for [ijacquez](https://github.com/ijacquez), and
 could be moved to private repository soon.
 
-1. In the `docker-pacman` directory, build the image.
+1. Build the image.
 
        docker build \
            --rm \
