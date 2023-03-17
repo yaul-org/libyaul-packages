@@ -5,7 +5,7 @@ _realname=ssshell
 _install_relpath="opt/tool-chains/sh2eb-elf"
 
 pkgname="${_realname}"
-pkgver=
+pkgver=1.0.0
 pkgrel=1
 pkgdesc="Sega Saturn Shell"
 arch=('x86_64')
@@ -25,17 +25,21 @@ pkgver() {
 
 prepare() {
   cd "${srcdir}/${_realname}"
-  meson -C --prefix "${pkgdir}/${_install_relpath}" build
+
+  meson --prefix "${pkgdir}/${_install_relpath}" build
 }
 
 build() {
   cd "${srcdir}/${_realname}"
+
   cd build
   ninja
 }
 
 package() {
   cd "${srcdir}/${_realname}"
+
+  cd build
   ninja install
 }
 
