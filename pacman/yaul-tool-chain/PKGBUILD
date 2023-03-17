@@ -2,6 +2,8 @@
 
 _branch="master"
 _realname=yaul-tool-chain-git
+_install_relpath="opt/tool-chains"
+
 pkgname=${_realname}
 pkgver=r134.06fb0e6
 pkgrel=1
@@ -31,12 +33,12 @@ prepare() {
   /bin/sed -i -E 's#^(CT_DEBUG_CT)=.*#\1=n#g' .config
   /bin/sed -i -E 's#^(CT_DEBUG_INTERACTIVE)=.*#\1=n#g' .config
   /bin/sed -i -E 's#^(CT_LOCAL_TARBALLS_DIR)=.*#\1='${srcdir}'/tarballs#g' .config
-  /bin/sed -i -E 's#^(CT_PREFIX_DIR)=.*$#\1="${CT_PREFIX:-'"${srcdir}/opt/tool-chains"'}/${CT_HOST:+HOST-${CT_HOST}/}${CT_TARGET}"#g' .config
+  /bin/sed -i -E 's#^(CT_PREFIX_DIR)=.*$#\1="${CT_PREFIX:-'"${srcdir}/${_install_relpath}"'}/${CT_HOST:+HOST-${CT_HOST}/}${CT_TARGET}"#g' .config
   /bin/sed -i -E 's#^(CT_LOG_TO_FILE)=.*#\1=n#g' .config
   /bin/sed -i -E 's#^(CT_LOG_FILE_COMPRESS)=.*#\1=n#g' .config
 
   /bin/mkdir -p "${srcdir}/tarballs"
-  /bin/mkdir -p "${srcdir}/opt/tool-chains"
+  /bin/mkdir -p "${srcdir}/${_install_relpath}"
 }
 
 build() {
