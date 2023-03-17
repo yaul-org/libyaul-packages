@@ -4,10 +4,15 @@ set -x
 
 source "${REPO_BASEPATH}/scripts/envs.sh" || exit 1
 
-export REPO_PACKAGE="yaul"
-export REPO_DIR="yaul"
+export REPO_PACKAGE="ssshell"
+export REPO_DIR="ssshell"
 
 linux_makepkg() {
+    # XXX: Unfortunately, there's a bug in the libftdi package. See:
+    #      <https://bugs.archlinux.org/task/69115>.
+    install_pkg libftdi pkg-config
+    sudo /bin/sed -E -i 's/libftdipp1/libftdi1/g' /usr/lib/pkgconfig/libftdi1.pc
+
     make_pkg -sC
 }
 
@@ -30,9 +35,6 @@ clone_repository "${REPO_BRANCH}"
 cd "${REPO_BASEPATH}/repository/pacman/${REPO_OS}/${REPO_DIR}" || { panic "Directory path pacman/${REPO_OS}/${REPO_DIR} doesn't exist" 1; }
 
 sync_pacman
-
-# Force install the tool-chain for Linux
-install_pkg yaul-linux/yaul-tool-chain-git
 
 case "${REPO_OS}" in
     "linux")
