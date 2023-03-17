@@ -7,9 +7,10 @@ build_kronos() {
     export PKG_SUBPATH="pacman/yaul-emulator-kronos"
     pushd "${BUILD_BASEPATH}/repository/${PKG_SUBPATH}" || { panic "Directory path ${PKG_SUBPATH} doesn't exist" 1; }
     make_pkg -sC
-    new_pkgver=$(extract_pkgver_file "PKGBUILD")
-    new_pkgrel=$(extract_pkgrel_file "PKGBUILD")
-    update_repo "${PKG_NAME}" "${new_pkgver}" "${new_pkgrel}"
+    new_pkgver=$(extract_pkgver "PKGBUILD")
+    new_pkgrel=$(extract_pkgrel "PKGBUILD")
+    update_repo_db "${PKG_NAME}" "${new_pkgver}" "${new_pkgrel}"
+    sync_repo "${REPO_SUBPATH}"
     popd || exit 1
 }
 
@@ -18,9 +19,10 @@ build_mednafen() {
     export PKG_SUBPATH="pacman/yaul-emulator-mednafen"
     pushd "${BUILD_BASEPATH}/repository/${PKG_SUBPATH}" || { panic "Directory path ${PKG_SUBPATH} doesn't exist" 1; }
     make_pkg -sC
-    new_pkgver=$(extract_pkgver_file "PKGBUILD")
-    new_pkgrel=$(extract_pkgrel_file "PKGBUILD")
-    update_repo "${PKG_NAME}" "${new_pkgver}" "${new_pkgrel}"
+    new_pkgver=$(extract_pkgver "PKGBUILD")
+    new_pkgrel=$(extract_pkgrel "PKGBUILD")
+    update_repo_db "${PKG_NAME}" "${new_pkgver}" "${new_pkgrel}"
+    sync_repo "${REPO_SUBPATH}"
     popd || exit 1
 }
 

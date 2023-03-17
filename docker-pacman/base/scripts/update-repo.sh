@@ -30,6 +30,4 @@ if ! /usr/bin/git diff --exit-code --name-only PKGBUILD >/dev/null 2>&1; then
     /usr/bin/git commit PKGBUILD -m "Update package version for ${PKGNAME} ${PKGVER}-${PKGREL}" || { panic "Unable to commit changes" 1; }
     /usr/bin/git push origin -u "${GIT_BRANCH}" || { panic "Unable to push commits" 1; }
 fi
-
-/bin/bash -x "${BUILD_BASEPATH}/scripts/s3sync.sh" "${REPO_SUBPATH}" || exit 1
 }
