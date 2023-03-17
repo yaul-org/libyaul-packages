@@ -1,23 +1,21 @@
 #!/bin/bash
 {
-set -x
+source "${BUILD_BASEPATH}/scripts/envs.sh" || exit 1
 
-source "${REPO_BASEPATH}/scripts/envs.sh" || exit 1
+export PKG_NAME="yaul-examples-git"
+export PKG_SUBPATH="pacman/yaul-examples"
 
-export REPO_PACKAGE="yaul-examples-git"
-export REPO_DIR="yaul-examples"
+cd "${BUILD_BASEPATH}" || exit 1
 
-cd "${REPO_BASEPATH}" || exit 1
-
-s3mirror
-clone_repository "${REPO_BRANCH}"
+mirror_repo
+clone_repository "${GIT_BRANCH}"
 sync_pacman
 
-cd "${REPO_BASEPATH}/repository/pacman/${REPO_DIR}" || { panic "Directory path pacman/${REPO_DIR} doesn't exist" 1; }
+cd "${BUILD_BASEPATH}/repository/${PKG_SUBPATH}" || { panic "Directory path ${PKG_SUBPATH} doesn't exist" 1; }
 make_pkg -sC
 
 new_pkgver=$(extract_pkgver_file "PKGBUILD")
 new_pkgrel=$(extract_pkgrel_file "PKGBUILD")
 
-update_repo "${REPO_PACKAGE}" "${new_pkgver}" "${new_pkgrel}"
+update_repo "${PKG_NAME}" "${new_pkgver}" "${new_pkgrel}"
 }

@@ -15,11 +15,11 @@ could be moved to private repository soon.
 
 2. Once the image is built, run one of the scripts
 
-       ./update-yaul.sh
-       ./update-yaul-examples.sh
-       ./update-yaul-emulators.sh
-       ./update-yaul-tool-chain.sh
-       ./update-ssshell.sh
+       ./update.sh yaul
+       ./update.sh yaul-examples
+       ./update.sh yaul-emulators
+       ./update.sh yaul-tool-chain
+       ./update.sh ssshell
 
 ## Known issues
 

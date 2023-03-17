@@ -99,11 +99,13 @@ package_exists() {
 }
 
 # Mirror S3 bucket.
-s3_mirror() {
-    /bin/bash "${REPO_BASEPATH}/scripts/s3mirror.sh" || exit 1
+mirror_repo() {
+    /bin/bash "${BUILD_BASEPATH}/scripts/s3mirror.sh" || exit 1
 }
 
 # Update Pacman repo.
+#
+# Expects the package file to exist in the current directory.
 #
 # $1 - The package name
 # $2 - The package version, $pkgver
@@ -117,7 +119,7 @@ update_repo() {
     [ -z "${_pkgver}" ]  && { panic "update_repo: Invalid argument \$2" 1; }
     [ -z "${_pkgrel}" ]  && { panic "update_repo: Invalid argument \$3" 1; }
 
-    /bin/bash "${REPO_BASEPATH}/scripts/update-repo.sh" "${_pkgname}" "${_pkgver}" "${_pkgrel}" || exit 1
+    /bin/bash "${BUILD_BASEPATH}/scripts/update-repo.sh" "${_pkgname}" "${_pkgver}" "${_pkgrel}" || exit 1
 }
 
 [ "${0##*/}" = "${BASH_SOURCE[0]##*/}" ] && { panic "Do not execute ${0##*/} directly" 1; }
