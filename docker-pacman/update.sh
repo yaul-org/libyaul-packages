@@ -2,8 +2,6 @@
 
 [ -z "$(docker images -q ijacquez/yaul-packages:latest 2>/dev/null)" ] && { printf -- "Image \"ijacquez/yaul-packages\" doesn't exist\n"; exit 1; }
 
-set -e
-
 [ ${#} -eq 1 ] || { printf -- "Usage: ${0##*/} package-name\n" 2>&1; exit 1; }
 
 PKGNAME="${1}"
