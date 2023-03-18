@@ -11,7 +11,7 @@ pkgdesc="An open source development kit for the SEGA Saturn"
 arch=('x86_64')
 url="http://github.com/ijacquez/libyaul"
 license=('MIT')
-depends=("yaul-tool-chain-git" "xorriso" "python" "make" "gcc" "gawk" "sed")
+depends=("yaul-tool-chain-git" "xorriso")
 makedepends=("make" "gcc" "tar" "gawk" "sed" "findutils" "git" "yaul-tool-chain-git")
 options=('!strip' '!buildflags' '!makeflags' 'staticlibs' '!debug')
 source=("${_realname}"::"git+https://github.com/ijacquez/libyaul#branch=${_branch}")
