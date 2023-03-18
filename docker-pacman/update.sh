@@ -1,13 +1,16 @@
 #!/bin/bash
 
-[ -z "$(docker images -q ijacquez/yaul-packages:latest 2>/dev/null)" ] && { printf -- "Image \"ijacquez/yaul-packages\" doesn't exist\n"; exit 1; }
-
 [ ${#} -eq 1 ] || { printf -- "Usage: ${0##*/} package-name\n" 2>&1; exit 1; }
 
 PKGNAME="${1}"
 GIT_BRANCH="${GIT_BRANCH:=master}"
 
-# Sanity checks
+[ -z "${PKGNAME}" ] && { printf -- "Argument PACKAGE-NAME is invalid\n"; exit 1; }
+
+command -v docker >/dev/null 2>&1 || { printf -- "Docker is not available\n"; exit 1; }
+
+[ -z "$(docker images -q ijacquez/yaul-packages:latest 2>/dev/null)" ] && { printf -- "Image \"ijacquez/yaul-packages\" doesn't exist\n"; exit 1; }
+
 [ -f "base/.s3cfg" ]      || { printf -- "File \"base/.s3cfg\" does not exist\n" >&2; exit 1; }
 [ -f "base/.ssh/id_rsa" ] || { printf -- "File \"base/.ssh/id_rsa\" does not exist\n" >&2; exit 1; }
 
