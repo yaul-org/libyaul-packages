@@ -20,7 +20,7 @@ trap '/bin/rm -f '"${REPO_ROOTPATH}/"${PKGFILE}'' 1
 # Check if the file already exists in the repo
 if [ -f "${REPO_ROOTPATH}/"${PKGFILE} ]; then
     # Bump $pkgrel
-    sed -E -i 's/^pkgrel=[0-9]+/'$((${PKGREL}+1))'/g' "PKGBUILD"
+    sed -E -i 's/^pkgrel=[0-9]+/pkgrel='$((${PKGREL}+1))'/g' "PKGBUILD"
     # Rebuild package without building, then clean after
     make_pkg -sRc
 fi
