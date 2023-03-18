@@ -1,38 +1,44 @@
 #!/bin/bash
 {
-source "${REPO_BASEPATH}/scripts/envs.sh"
+source "${BUILD_BASEPATH}/scripts/envs.sh" || exit 1
 
-[ -z "${REPO_DB}" ]       && { panic "Environment variable REPO_DB must be specified" 1; }
-[ -z "${REPO_DIR}" ]      && { panic "Environment variable REPO_DIR must be specified" 1; }
-[ -z "${REPO_OS}" ]       && { panic "Environment variable REPO_OS must be specified" 1; }
-[ -z "${REPO_PACKAGE}" ]  && { panic "environment variable REPO_PACKAGE MUST be specified" 1; }
-[ -z "${REPO_ROOTPATH}" ] && { panic "Environment variable REPO_ROOTPATH must be specified" 1; }
-[ -z "${REPO_SUBPATH}" ]  && { panic "Environment variable REPO_SUBPATH must be specified" 1; }
+[ ${#} -eq 3 ] || { panic "Usage: ${0##*/} package pkgver" 1; }
 
-PKGVER="${1}"
+PKGNAME="${1}"
+PKGVER="${2}"
+PKGREL="${3}"
+PKGFILE="${PKGNAME}-${PKGVER}-${PKGREL}-"'*'".pkg.tar.zst"
 
-[ ${#} -eq 1 ] || { panic "Usage: ${0##*/} pkgver" 1; }
-[ -z "${PKGVER}" ] && { panic "Argument PKGVER is invalid" 1; }
+[ -z "${PKGNAME}" ] && { panic "Argument PKGNAME is invalid" 1; }
+[ -z "${PKGVER}" ]  && { panic "Argument PKGVER is invalid" 1; }
+[ -z "${PKGREL}" ]  && { panic "Argument PKGREL is invalid" 1; }
 
-trap '/bin/rm '"${REPO_ROOTPATH}/${REPO_PACKAGE}-${PKGVER}"'-*.pkg.tar.zst' 1
+trap '/bin/rm -f '"${REPO_ROOTPATH}/"${PKGFILE}'' 1
 
-mapfile -t files < <(/usr/bin/find "${REPO_ROOTPATH}" -type f \( -regex "${REPO_PACKAGE}-*-[0-9]+\.pkg\.tar\.zst" -a \! -name "*${PKGVER}*" \))
+[ -f ${PKGFILE} ] || { panic "Package file ${PKGFILE} does not exist in ${PWD}" 1; }
 
-/bin/rm -f ${files[@]}
-
-if ! [ ${#files[@]} -eq 0 ]; then
-    /usr/sbin/repo-remove "${REPO_DB}" "${REPO_PACKAGE}" || { panic "Unable to remove '${file}' from the repository" 1; }
+# Check if the file already exists in the repo
+if [ -f "${REPO_ROOTPATH}/"${PKGFILE} ]; then
+    # Bump $pkgrel
+    PKGREL=$((${PKGREL}+1))
+    # Update package filename
+    PKGFILE="${PKGNAME}-${PKGVER}-${PKGREL}-"'*'".pkg.tar.zst"
+    sed -E -i 's/^pkgrel=[0-9]+/pkgrel='${PKGREL}'/g' "PKGBUILD"
+    # Rebuild package without building, then clean after
+    make_pkg -sRc
 fi
 
-if ! package_exists "${REPO_PACKAGE}" "${PKGVER}"; then
-    /bin/cp ${REPO_PACKAGE}-"${PKGVER}"-*.pkg.tar.zst "${REPO_ROOTPATH}"/
-    /usr/sbin/repo-add "${REPO_DB}" "${REPO_ROOTPATH}/${REPO_PACKAGE}-${PKGVER}"-*.pkg.tar.zst || { panic "Unable to add file to repository" 1; }
+/bin/rm -f "${REPO_ROOTPATH}/"${PKGFILE}
+/bin/cp ${PKGFILE} "${REPO_ROOTPATH}"/ || { panic "Unable to copy package file to repository" 1; }
 
-    if ! /usr/bin/git diff --exit-code --name-only PKGBUILD >/dev/null 2>&1; then
-        /usr/bin/git commit PKGBUILD -m "Update package version for ${REPO_PACKAGE} ${PKGVER} (${REPO_OS})" || { panic "Unable to commit changes" 1; }
-        /usr/bin/git push origin -u master || { panic "Unable to push commits" 1; }
-    fi
+# Add package to repo. Only add packages that are not already in the database,
+# remove old package file from disk after updating database, and do not add
+# package to database if a newer version is already present
+/usr/sbin/repo-add -n -R -p "${REPO_DB}" "${REPO_ROOTPATH}/"${PKGFILE} || { panic "Unable to add package file to repository" 1; }
+
+# Commit changes to PKGBUILD. This happens when pkgver is updated
+if ! /usr/bin/git diff --exit-code --name-only PKGBUILD >/dev/null 2>&1; then
+    /usr/bin/git commit PKGBUILD -m "Update package version for ${PKGNAME} ${PKGVER}-${PKGREL}" || { panic "Unable to commit changes" 1; }
+    /usr/bin/git push origin -u "${GIT_BRANCH}" || { panic "Unable to push commits" 1; }
 fi
-
-/bin/bash -x "${REPO_BASEPATH}/scripts/s3sync.sh" "${REPO_SUBPATH}" || exit 1
 }

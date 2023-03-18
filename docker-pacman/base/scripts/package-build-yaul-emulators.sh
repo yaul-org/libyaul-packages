@@ -1,63 +1,37 @@
 #!/bin/bash
 {
-set -x
+source "${BUILD_BASEPATH}/scripts/envs.sh" || exit 1
 
-source "${REPO_BASEPATH}/scripts/envs.sh" || exit 1
-
-linux_build_kronos() {
-    export REPO_PACKAGE="yaul-emulator-kronos-git"
-    export REPO_DIR="yaul-emulator-kronos"
-    pushd ${REPO_DIR} || { panic "Directory ${REPO_DIR} doesn't exist" 1; }
+build_kronos() {
+    export PKG_NAME="yaul-emulator-kronos-git"
+    export PKG_SUBPATH="pacman/yaul-emulator-kronos"
+    pushd "${BUILD_BASEPATH}/repository/${PKG_SUBPATH}" || { panic "Directory path ${PKG_SUBPATH} doesn't exist" 1; }
     make_pkg -sC
-    new_pkgver=$(extract_pkgver_file "PKGBUILD")
-    /bin/bash "${REPO_BASEPATH}/scripts/update-repo.sh" "${new_pkgver}" || exit 1
-    popd || exit 1
-}
-
-mingw_w64_build_yabause() {
-    export REPO_PACKAGE="yaul-emulator-yabause"
-    export REPO_DIR="yaul-emulator-yabause"
-    pushd ${REPO_DIR} || { panic "Directory ${REPO_DIR} doesn't exist" 1; }
-    old_pkgver=$(extract_pkgver_file "PKGBUILD")
-    if ! package_exists "${REPO_PACKAGE}" "${old_pkgver}"; then
-        make_pkg -sC
-        new_pkgver=$(extract_pkgver_file "PKGBUILD")
-        /bin/bash "${REPO_BASEPATH}/scripts/update-repo.sh" "${new_pkgver}" || exit 1
-    fi
+    new_pkgver=$(extract_pkgver "PKGBUILD")
+    new_pkgrel=$(extract_pkgrel "PKGBUILD")
+    update_repo_db "${PKG_NAME}" "${new_pkgver}" "${new_pkgrel}"
+    sync_repo "${REPO_SUBPATH}"
     popd || exit 1
 }
 
 build_mednafen() {
-    export REPO_PACKAGE="yaul-emulator-mednafen"
-    export REPO_DIR="yaul-emulator-mednafen"
-    pushd ${REPO_DIR} || { panic "Directory ${REPO_DIR} doesn't exist" 1; }
-    old_pkgver=$(extract_pkgver_file "PKGBUILD")
-    if ! package_exists "${REPO_PACKAGE}" "${old_pkgver}"; then
-        make_pkg -sC
-        new_pkgver=$(extract_pkgver_file "PKGBUILD")
-        /bin/bash "${REPO_BASEPATH}/scripts/update-repo.sh" "${new_pkgver}" || exit 1
-    fi
+    export PKG_NAME="yaul-emulator-mednafen"
+    export PKG_SUBPATH="pacman/yaul-emulator-mednafen"
+    pushd "${BUILD_BASEPATH}/repository/${PKG_SUBPATH}" || { panic "Directory path ${PKG_SUBPATH} doesn't exist" 1; }
+    make_pkg -sC
+    new_pkgver=$(extract_pkgver "PKGBUILD")
+    new_pkgrel=$(extract_pkgrel "PKGBUILD")
+    update_repo_db "${PKG_NAME}" "${new_pkgver}" "${new_pkgrel}"
+    sync_repo "${REPO_SUBPATH}"
     popd || exit 1
 }
 
-mkdir -p "${REPO_BASEPATH}/s3"
+cd "${BUILD_BASEPATH}" || exit 1
 
-cd "${REPO_BASEPATH}" || exit 1
-/bin/bash -x "${REPO_BASEPATH}/scripts/s3mirror.sh" "${REPO_SUBPATH}" || exit 1
-clone_repository "${REPO_BRANCH}"
+mirror_repo
+clone_repository "${GIT_BRANCH}"
 sync_pacman
 
-# This will catch a bad REPO_OS value
-cd "${REPO_BASEPATH}/repository/pacman/${REPO_OS}" || { panic "Directory path pacman/${REPO_OS} doesn't exist" 1; }
-
-case "${REPO_OS}" in
-    "linux")
-        linux_build_kronos
-        build_mednafen
-        ;;
-    "mingw-w64")
-        mingw_w64_build_yabause
-        build_mednafen
-        ;;
-esac
+build_kronos
+build_mednafen
 }

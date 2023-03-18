@@ -5,18 +5,18 @@ _realname=yaul
 _install_relpath="opt/tool-chains/sh2eb-elf"
 
 pkgname="${_realname}"
-pkgver=0.1.0
+pkgver=0.2.0
 pkgrel=1
 pkgdesc="An open source development kit for the SEGA Saturn"
 arch=('x86_64')
 url="http://github.com/ijacquez/libyaul"
 license=('MIT')
 depends=("yaul-tool-chain-git" "xorriso" "python")
-makedepends=("make" "gcc" "tar" "gawk" "sed" "findutils" "git")
+makedepends=("make" "gcc" "tar" "gawk" "sed" "findutils" "git" "yaul-tool-chain-git")
 options=('!strip' '!buildflags' '!makeflags' 'staticlibs' '!debug')
 source=("${_realname}"::"git+https://github.com/ijacquez/libyaul#branch=${_branch}")
 sha256sums=('SKIP')
-install=../../yaul.install
+install=../yaul.install
 
 _change_env_value() {
   local _variable="${1}"

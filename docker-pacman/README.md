@@ -6,7 +6,7 @@ Pacman docker
 These scripts are intended only for [ijacquez](https://github.com/ijacquez), and
 could be moved to private repository soon.
 
-1. In the `docker-pacman` directory, build the image.
+1. Build the image.
 
        docker build \
            --rm \
@@ -15,11 +15,11 @@ could be moved to private repository soon.
 
 2. Once the image is built, run one of the scripts
 
-       ./update-yaul.sh
-       ./update-yaul-examples.sh
-       ./update-yaul-emulators.sh
-       ./update-yaul-tool-chain.sh
-       ./update-ssshell.sh
+       ./update.sh yaul
+       ./update.sh yaul-examples
+       ./update.sh yaul-emulators
+       ./update.sh yaul-tool-chain
+       ./update.sh ssshell
 
 ## Known issues
 

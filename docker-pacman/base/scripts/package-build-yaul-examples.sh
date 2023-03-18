@@ -1,24 +1,22 @@
 #!/bin/bash
 {
-set -x
+source "${BUILD_BASEPATH}/scripts/envs.sh" || exit 1
 
-source "${REPO_BASEPATH}/scripts/envs.sh" || exit 1
+export PKG_NAME="yaul-examples-git"
+export PKG_SUBPATH="pacman/yaul-examples"
 
-export REPO_PACKAGE="yaul-examples-git"
-export REPO_DIR="yaul-examples"
+cd "${BUILD_BASEPATH}" || exit 1
 
-mkdir -p "${REPO_BASEPATH}/s3"
-
-cd "${REPO_BASEPATH}" || exit 1
-/bin/bash -x "${REPO_BASEPATH}/scripts/s3mirror.sh" "${REPO_SUBPATH}" || exit 1
-clone_repository "${REPO_BRANCH}"
+mirror_repo
+clone_repository "${GIT_BRANCH}"
 sync_pacman
 
-cd "${REPO_BASEPATH}/repository/pacman/${REPO_DIR}" || { panic "Directory pacman/${REPO_DIR} doesn't exist" 1; }
-
+cd "${BUILD_BASEPATH}/repository/${PKG_SUBPATH}" || { panic "Directory path ${PKG_SUBPATH} doesn't exist" 1; }
 make_pkg -sC
 
-pkgver=$(extract_pkgver_file "PKGBUILD")
+new_pkgver=$(extract_pkgver "PKGBUILD")
+new_pkgrel=$(extract_pkgrel "PKGBUILD")
 
-/bin/bash "${REPO_BASEPATH}/scripts/update-repo.sh" "${pkgver}" || exit 1
+update_repo_db "${PKG_NAME}" "${new_pkgver}" "${new_pkgrel}"
+sync_repo "${REPO_SUBPATH}"
 }

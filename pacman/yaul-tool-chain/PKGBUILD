@@ -2,15 +2,17 @@
 
 _branch="master"
 _realname=yaul-tool-chain-git
+_install_relpath="opt/tool-chains"
+
 pkgname=${_realname}
-pkgver=r132.00b3688
+pkgver=r134.06fb0e6
 pkgrel=1
 pkgdesc="Tool-chain for Yaul"
 arch=('x86_64')
 url="https://yaul.org/"
 license=('MIT')
 depends=("gawk" "sed" "make")
-makedepends=("make" "gcc" "unzip" "help2man" "wget" "git" "community/mingw-w64-gcc")
+makedepends=("make" "gcc" "unzip" "help2man" "wget" "git" "mingw-w64-gcc")
 options=('!strip' '!buildflags' 'staticlibs' 'debug')
 source=("git+https://github.com/ijacquez/libyaul-build-scripts#branch=${_branch}" "local://yaul.sh")
 sha256sums=('SKIP' 'SKIP')
@@ -31,12 +33,12 @@ prepare() {
   /bin/sed -i -E 's#^(CT_DEBUG_CT)=.*#\1=n#g' .config
   /bin/sed -i -E 's#^(CT_DEBUG_INTERACTIVE)=.*#\1=n#g' .config
   /bin/sed -i -E 's#^(CT_LOCAL_TARBALLS_DIR)=.*#\1='${srcdir}'/tarballs#g' .config
-  /bin/sed -i -E 's#^(CT_PREFIX_DIR)=.*$#\1="${CT_PREFIX:-'"${srcdir}/opt/tool-chains"'}/${CT_HOST:+HOST-${CT_HOST}/}${CT_TARGET}"#g' .config
+  /bin/sed -i -E 's#^(CT_PREFIX_DIR)=.*$#\1="${CT_PREFIX:-'"${srcdir}/${_install_relpath}"'}/${CT_HOST:+HOST-${CT_HOST}/}${CT_TARGET}"#g' .config
   /bin/sed -i -E 's#^(CT_LOG_TO_FILE)=.*#\1=n#g' .config
   /bin/sed -i -E 's#^(CT_LOG_FILE_COMPRESS)=.*#\1=n#g' .config
 
   /bin/mkdir -p "${srcdir}/tarballs"
-  /bin/mkdir -p "${srcdir}/opt/tool-chains"
+  /bin/mkdir -p "${srcdir}/${_install_relpath}"
 }
 
 build() {

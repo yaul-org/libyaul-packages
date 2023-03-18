@@ -4,10 +4,10 @@ _branch="develop"
 _realname=yaul-examples-git
 
 pkgname="${_realname}"
-pkgver=r571.e9fcfdc
+pkgver=r572.7b21607
 pkgrel=1
-pkgdesc="Examples for Yaul (mingw-w64)"
-arch=('x86_64')
+pkgdesc="Examples for Yaul"
+arch=('any')
 url="http://yaul.org/"
 license=('MIT')
 options=('!strip' '!buildflags' 'staticlibs' '!debug')
