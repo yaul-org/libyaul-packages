@@ -21,12 +21,15 @@ trap '/bin/rm -f '"${REPO_ROOTPATH}/"${PKGFILE}'' 1
 if [ -f "${REPO_ROOTPATH}/"${PKGFILE} ]; then
     # Bump $pkgrel
     PKGREL=$((${PKGREL}+1))
-    # Update package filename
-    PKGFILE="${PKGNAME}-${PKGVER}-${PKGREL}-"'*'".pkg.tar.zst"
-    sed -E -i 's/^pkgrel=[0-9]+/pkgrel='${PKGREL}'/g' "PKGBUILD"
-    # Rebuild package without building, then clean after
-    make_pkg -sRc
+else
+    # Reset $pkgrel
+    PKGREL=1
 fi
+# Update package filename
+PKGFILE="${PKGNAME}-${PKGVER}-${PKGREL}-"'*'".pkg.tar.zst"
+/bin/sed -E -i 's/^pkgrel=[0-9]+/pkgrel='${PKGREL}'/g' "PKGBUILD"
+# Rebuild package without building, then clean after
+make_pkg -sRc
 
 /bin/rm -f "${REPO_ROOTPATH}/"${PKGFILE}
 /bin/cp ${PKGFILE} "${REPO_ROOTPATH}"/ || { panic "Unable to copy package file to repository" 1; }
