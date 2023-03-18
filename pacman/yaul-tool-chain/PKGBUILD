@@ -5,7 +5,7 @@ _realname=yaul-tool-chain-git
 _install_relpath="opt/tool-chains"
 
 pkgname=${_realname}
-pkgver=r136.a7fead6
+pkgver=r137.ad06928
 pkgrel=1
 pkgdesc="Tool-chain for Yaul"
 arch=('x86_64')
