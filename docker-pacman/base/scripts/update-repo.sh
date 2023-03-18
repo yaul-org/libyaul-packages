@@ -20,16 +20,20 @@ trap '/bin/rm -f '"${REPO_ROOTPATH}/"${PKGFILE}'' 1
 # Check if the file already exists in the repo
 if [ -f "${REPO_ROOTPATH}/"${PKGFILE} ]; then
     # Bump $pkgrel
-    PKGREL=$((${PKGREL}+1))
+    NEW_PKGREL=$((${PKGREL}+1))
 else
     # Reset $pkgrel
-    PKGREL=1
+    NEW_PKGREL=1
 fi
-# Update package filename
-PKGFILE="${PKGNAME}-${PKGVER}-${PKGREL}-"'*'".pkg.tar.zst"
-/bin/sed -E -i 's/^pkgrel=[0-9]+/pkgrel='${PKGREL}'/g' "PKGBUILD"
-# Rebuild package without building, then clean after
-make_pkg -sRc
+
+if ! [ ${PKGREL} -eq ${NEW_PKGREL} ]; then
+    PKGREL=${NEW_PKGREL}
+    # Update package filename
+    PKGFILE="${PKGNAME}-${PKGVER}-${PKGREL}-"'*'".pkg.tar.zst"
+    /bin/sed -E -i 's/^pkgrel=[0-9]+/pkgrel='${PKGREL}'/g' "PKGBUILD"
+    # Rebuild package without building, then clean after
+    make_pkg -sRc
+fi
 
 /bin/rm -f "${REPO_ROOTPATH}/"${PKGFILE}
 /bin/cp ${PKGFILE} "${REPO_ROOTPATH}"/ || { panic "Unable to copy package file to repository" 1; }
