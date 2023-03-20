@@ -11,7 +11,7 @@ pkgdesc="Tool-chain for Yaul"
 arch=('x86_64')
 url="https://yaul.org/"
 license=('MIT')
-makedepends=("make" "gcc" "unzip" "help2man" "wget" "git" "mingw-w64-gcc")
+makedepends=("make" "gcc" "unzip" "help2man" "wget" "git")
 options=('!strip' '!buildflags' 'staticlibs' 'debug')
 source=("git+https://github.com/ijacquez/libyaul-build-scripts#branch=${_branch}" "local://yaul.sh")
 sha256sums=('SKIP' 'SKIP')
