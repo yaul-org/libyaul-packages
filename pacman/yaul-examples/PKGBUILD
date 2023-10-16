@@ -11,7 +11,7 @@ arch=('any')
 url="http://yaul.org/"
 license=('MIT')
 options=('!strip' '!buildflags' 'staticlibs' '!debug')
-source=("${_realname}"::"git+https://github.com/ijacquez/libyaul-examples#branch=${_branch}")
+source=("${_realname}"::"git+https://github.com/yaul-org/libyaul-examples#branch=${_branch}")
 sha256sums=('SKIP')
 
 pkgver() {

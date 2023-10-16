@@ -9,12 +9,12 @@ pkgver=1.0.0
 pkgrel=1
 pkgdesc="Sega Saturn Shell"
 arch=('x86_64')
-url="http://github.com/ijacquez/ssshell"
+url="http://github.com/yaul-org/ssshell"
 license=('MIT')
 depends=("libftdi" "readline")
 makedepends=("git" "meson" "ninja" "gcc" "libftdi" "readline")
 options=('!strip' '!buildflags' '!makeflags' '!staticlibs' '!debug')
-source=("${_realname}"::"git+https://github.com/ijacquez/ssshell#branch=${_branch}")
+source=("${_realname}"::"git+https://github.com/yaul-org/ssshell#branch=${_branch}")
 sha256sums=('SKIP')
 
 pkgver() {

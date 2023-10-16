@@ -9,12 +9,12 @@ pkgver=0.2.0
 pkgrel=7
 pkgdesc="An open source development kit for the SEGA Saturn"
 arch=('x86_64')
-url="http://github.com/ijacquez/libyaul"
+url="http://github.com/yaul-org/libyaul"
 license=('MIT')
 depends=("yaul-tool-chain-git" "xorriso")
 makedepends=("make" "gcc" "tar" "gawk" "sed" "findutils" "git" "yaul-tool-chain-git")
 options=('!strip' '!buildflags' '!makeflags' 'staticlibs' '!debug')
-source=("${_realname}"::"git+https://github.com/ijacquez/libyaul#branch=${_branch}")
+source=("${_realname}"::"git+https://github.com/yaul-org/libyaul#branch=${_branch}")
 sha256sums=('SKIP')
 install=../yaul.install
 
