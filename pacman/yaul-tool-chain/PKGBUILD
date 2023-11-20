@@ -9,7 +9,7 @@ pkgver=r137.ad06928
 pkgrel=2
 pkgdesc="Tool-chain for Yaul"
 arch=('x86_64')
-url="https://yaul.org/"
+url="http://github.com/yaul-org/libyaul-build-scripts"
 license=('MIT')
 makedepends=("make" "gcc" "unzip" "help2man" "wget" "git")
 options=('!strip' '!buildflags' 'staticlibs' 'debug')
@@ -28,7 +28,7 @@ prepare() {
   /usr/bin/git submodule update -f
 
   /bin/rm -f .config
-  /bin/cp sh2eb-elf/native-linux.config .config
+  /bin/cp configs/sh2eb-elf/native-linux.config .config
   /bin/sed -i -E 's#^(CT_DEBUG_CT)=.*#\1=n#g' .config
   /bin/sed -i -E 's#^(CT_DEBUG_INTERACTIVE)=.*#\1=n#g' .config
   /bin/sed -i -E 's#^(CT_LOCAL_TARBALLS_DIR)=.*#\1='${srcdir}'/tarballs#g' .config
