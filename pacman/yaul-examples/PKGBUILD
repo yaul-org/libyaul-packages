@@ -8,7 +8,7 @@ pkgver=r602.21fd76d
 pkgrel=1
 pkgdesc="Examples for Yaul"
 arch=('any')
-url="http://yaul.org/"
+url="http://github.com/yaul-org/libyaul-examples"
 license=('MIT')
 options=('!strip' '!buildflags' 'staticlibs' '!debug')
 source=("${_realname}"::"git+https://github.com/yaul-org/libyaul-examples#branch=${_branch}")
