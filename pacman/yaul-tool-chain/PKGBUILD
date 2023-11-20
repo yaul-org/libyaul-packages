@@ -19,7 +19,7 @@ sha256sums=('SKIP' 'SKIP')
 pkgver() {
   cd "${srcdir}/libyaul-build-scripts"
 
-  printf -- "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse HEAD | sed -r 's/(.{7}).*/\1/')"
+  /usr/bin/printf -- "r%i.%x" "$(git rev-list --count HEAD)" "$(git rev-parse HEAD | sed -r 's/(.{7}).*/0x\1/')"
 }
 
 prepare() {
@@ -54,7 +54,7 @@ build() {
   /usr/bin/make
   cd ..
 
-  crosstool-ng/ct-ng build
+  ./crosstool-ng/ct-ng build
 }
 
 package() {

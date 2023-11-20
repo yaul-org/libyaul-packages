@@ -18,7 +18,7 @@ sha256sums=('SKIP')
 pkgver() {
   cd "${srcdir}/Kronos"
 
-  printf -- "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse HEAD | sed -r 's/(.{7}).*/\1/')"
+  /usr/bin/printf -- "r%i.%x" "$(git rev-list --count HEAD)" "$(git rev-parse HEAD | sed -r 's/(.{7}).*/0x\1/')"
 }
 
 build() {
