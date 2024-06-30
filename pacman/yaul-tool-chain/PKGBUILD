@@ -5,8 +5,8 @@ _realname=yaul-tool-chain-git
 _install_relpath="opt/tool-chains"
 
 pkgname=${_realname}
-pkgver=r137.ad06928
-pkgrel=2
+pkgver=r167.98cc41b
+pkgrel=1
 pkgdesc="Tool-chain for Yaul"
 arch=('x86_64')
 url="http://github.com/yaul-org/libyaul-build-scripts"
