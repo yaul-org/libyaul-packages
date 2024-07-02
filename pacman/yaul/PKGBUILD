@@ -6,7 +6,7 @@ _install_relpath="opt/tool-chains/sh2eb-elf"
 
 pkgname="${_realname}"
 pkgver=0.3.1
-pkgrel=2
+pkgrel=3
 pkgdesc="An open source development kit for the SEGA Saturn"
 arch=('x86_64')
 url="http://github.com/yaul-org/libyaul"
